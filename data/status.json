@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "owner": {
+    "name": "示例用户",
+    "bio": "我用 Monitoring 记录每天都在做什么"
+  },
+  "updatedAt": "2026-10-01T16:02:38.359Z",
+  "records": [
+    {
+      "id": "r_demo1",
+      "kind": "work",
+      "activity": "实现 Monitoring 状态看板",
+      "start": "2026-10-01T14:27:38.359Z",
+      "end": "2026-10-01T15:32:38.359Z",
+      "note": "Fluent 2 组件层与 GitHub Pages 部署脚本",
+      "createdAt": "2026-10-01T14:27:38.359Z",
+      "updatedAt": "2026-10-01T15:32:38.359Z"
+    },
+    {
+      "id": "r_demo2",
+      "kind": "rest",
+      "activity": "晚饭 + 散步",
+      "start": "2026-10-01T15:34:38.359Z",
+      "end": "2026-10-01T15:56:38.359Z",
+      "note": "",
+      "createdAt": "2026-10-01T15:34:38.359Z",
+      "updatedAt": "2026-10-01T15:56:38.359Z"
+    },
+    {
+      "id": "r_demo3",
+      "kind": "study",
+      "activity": "读《设计心理学》第 4 章",
+      "start": "2026-10-01T15:57:38.359Z",
+      "end": "",
+      "note": "正在读，预计 1 小时后结束",
+      "createdAt": "2026-10-01T15:57:38.359Z",
+      "updatedAt": "2026-10-01T15:57:38.359Z"
+    }
+  ]
+}

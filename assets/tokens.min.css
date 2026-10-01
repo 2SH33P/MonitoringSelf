@@ -1,0 +1,653 @@
+/* 由 scripts/gen_tokens.mjs 从 @fluentui/tokens 自动生成 —— 请勿手改。
+ * 精简子集: 只保留状态页/仪表盘会用到的 token，远小于全量 tokens.css，
+ * 适合直接内联进单页应用。需要更多 token 时把规则加进 gen_tokens.mjs 的 KEEP。
+ */
+
+:root {
+  /* 圆角 */
+  --borderRadiusNone: 0;
+  --borderRadiusSmall: 2px;
+  --borderRadiusMedium: 4px;
+  --borderRadiusLarge: 6px;
+  --borderRadiusXLarge: 8px;
+  --borderRadius2XLarge: 12px;
+  --borderRadiusCircular: 10000px;
+
+  /* 描边宽度 */
+  --strokeWidthThin: 1px;
+  --strokeWidthThick: 2px;
+  --strokeWidthThicker: 3px;
+  --strokeWidthThickest: 4px;
+
+
+  /* 字体 */
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;
+  --fontSizeBase400: 16px;
+  --fontSizeBase500: 20px;
+  --fontSizeBase600: 24px;
+  --fontFamilyBase: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --fontFamilyMonospace: Consolas, 'Courier New', Courier, monospace;
+  --fontFamilyNumeric: Bahnschrift, 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+
+
+  /* 字号/字重 */
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;
+  --fontSizeBase400: 16px;
+  --fontSizeBase500: 20px;
+  --fontSizeBase600: 24px;
+
+  /* 高度层次 elevation */
+  --shadow2: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+  --shadow4: 0 0 2px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.14);
+  --shadow8: 0 0 2px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.14);
+  --shadow16: 0 0 2px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.14);
+  --shadow28: 0 0 8px rgba(0,0,0,0.12), 0 14px 28px rgba(0,0,0,0.14);
+  --shadow64: 0 0 8px rgba(0,0,0,0.12), 0 32px 64px rgba(0,0,0,0.14);
+
+  /* 动效时长 */
+  --durationUltraFast: 50ms;
+  --durationFaster: 100ms;
+  --durationFast: 150ms;
+  --durationNormal: 200ms;
+  --durationSlow: 300ms;
+  --durationSlower: 400ms;
+
+  /* 缓动曲线 */
+  --curveAccelerateMax: cubic-bezier(0.9,0.1,1,0.2);
+  --curveAccelerateMid: cubic-bezier(1,0,1,1);
+  --curveAccelerateMin: cubic-bezier(0.8,0,0.78,1);
+  --curveDecelerateMax: cubic-bezier(0.1,0.9,0.2,1);
+  --curveDecelerateMid: cubic-bezier(0,0,0,1);
+  --curveDecelerateMin: cubic-bezier(0.33,0,0.1,1);
+  --curveEasyEaseMax: cubic-bezier(0.8,0,0.2,1);
+  --curveEasyEase: cubic-bezier(0.33,0,0.67,1);
+
+  /* 其他(颜色等) */
+  --spacingHorizontalNone: 0;
+  --spacingHorizontalXXS: 2px;
+  --spacingHorizontalXS: 4px;
+  --spacingHorizontalSNudge: 6px;
+  --spacingHorizontalS: 8px;
+  --spacingHorizontalMNudge: 10px;
+  --spacingHorizontalM: 12px;
+  --spacingHorizontalL: 16px;
+  --spacingHorizontalXL: 20px;
+  --spacingHorizontalXXL: 24px;
+  --spacingHorizontalXXXL: 32px;
+  --spacingVerticalNone: 0;
+  --spacingVerticalXXS: 2px;
+  --spacingVerticalXS: 4px;
+  --spacingVerticalSNudge: 6px;
+  --spacingVerticalS: 8px;
+  --spacingVerticalMNudge: 10px;
+  --spacingVerticalM: 12px;
+  --spacingVerticalL: 16px;
+  --spacingVerticalXL: 20px;
+  --spacingVerticalXXL: 24px;
+  --spacingVerticalXXXL: 32px;
+  --colorNeutralForeground1: #242424;
+  --colorNeutralForeground1Hover: #242424;
+  --colorNeutralForeground1Pressed: #242424;
+  --colorNeutralForeground1Selected: #242424;
+  --colorNeutralForeground2: #424242;
+  --colorNeutralForeground2Hover: #242424;
+  --colorNeutralForeground2Pressed: #242424;
+  --colorNeutralForeground2Selected: #242424;
+  --colorNeutralForeground3: #616161;
+  --colorNeutralForeground3Hover: #424242;
+  --colorNeutralForeground3Pressed: #424242;
+  --colorNeutralForeground3Selected: #424242;
+  --colorNeutralForeground4: #707070;
+  --colorNeutralForegroundDisabled: #bdbdbd;
+  --colorNeutralForegroundInvertedDisabled: rgba(255, 255, 255, 0.4);
+  --colorCompoundBrandForeground1: #0f6cbd;
+  --colorCompoundBrandForeground1Hover: #115ea3;
+  --colorCompoundBrandForeground1Pressed: #0f548c;
+  --colorBrandForeground1: #0f6cbd;
+  --colorBrandForeground2: #115ea3;
+  --colorBrandForeground2Hover: #0f548c;
+  --colorBrandForeground2Pressed: #0a2e4a;
+  --colorNeutralForegroundInverted: #ffffff;
+  --colorNeutralForegroundOnBrand: #ffffff;
+  --colorNeutralForegroundInvertedLink: #ffffff;
+  --colorBrandForegroundInverted: #479ef5;
+  --colorBrandForegroundInvertedHover: #62abf5;
+  --colorBrandForegroundInvertedPressed: #479ef5;
+  --colorNeutralBackground1: #ffffff;
+  --colorNeutralBackground1Hover: #f5f5f5;
+  --colorNeutralBackground1Pressed: #e0e0e0;
+  --colorNeutralBackground1Selected: #ebebeb;
+  --colorNeutralBackground2: #fafafa;
+  --colorNeutralBackground2Hover: #f0f0f0;
+  --colorNeutralBackground2Pressed: #dbdbdb;
+  --colorNeutralBackground2Selected: #e6e6e6;
+  --colorNeutralBackground3: #f5f5f5;
+  --colorNeutralBackground3Hover: #ebebeb;
+  --colorNeutralBackground3Pressed: #d6d6d6;
+  --colorNeutralBackground3Selected: #e0e0e0;
+  --colorNeutralBackground4: #f0f0f0;
+  --colorNeutralBackground4Hover: #fafafa;
+  --colorNeutralBackground4Pressed: #f5f5f5;
+  --colorNeutralBackground4Selected: #ffffff;
+  --colorNeutralBackground5: #ebebeb;
+  --colorNeutralBackground5Hover: #f5f5f5;
+  --colorNeutralBackground5Pressed: #f0f0f0;
+  --colorNeutralBackground5Selected: #fafafa;
+  --colorNeutralBackground6: #e6e6e6;
+  --colorNeutralBackgroundInverted: #292929;
+  --colorNeutralBackgroundInvertedHover: #3d3d3d;
+  --colorTransparentBackgroundHover: transparent;
+  --colorTransparentBackgroundPressed: transparent;
+  --colorTransparentBackgroundSelected: transparent;
+  --colorNeutralBackgroundDisabled: #f0f0f0;
+  --colorBrandBackground: #0f6cbd;
+  --colorBrandBackgroundHover: #115ea3;
+  --colorBrandBackgroundPressed: #0c3b5e;
+  --colorBrandBackgroundSelected: #0f548c;
+  --colorCompoundBrandBackground: #0f6cbd;
+  --colorCompoundBrandBackgroundHover: #115ea3;
+  --colorCompoundBrandBackgroundPressed: #0f548c;
+  --colorBrandBackground2: #ebf3fc;
+  --colorBrandBackground2Hover: #cfe4fa;
+  --colorBrandBackground2Pressed: #96c6fa;
+  --colorBrandBackgroundInverted: #ffffff;
+  --colorBrandBackgroundInvertedHover: #ebf3fc;
+  --colorBrandBackgroundInvertedPressed: #b4d6fa;
+  --colorBrandBackgroundInvertedSelected: #cfe4fa;
+  --colorNeutralStroke1: #d1d1d1;
+  --colorNeutralStroke1Hover: #c7c7c7;
+  --colorNeutralStroke1Pressed: #b3b3b3;
+  --colorNeutralStroke2: #e0e0e0;
+  --colorNeutralStroke3: #f0f0f0;
+  --colorBrandStroke1: #0f6cbd;
+  --colorBrandStroke2: #b4d6fa;
+  --colorBrandStroke2Hover: #77b7f7;
+  --colorBrandStroke2Pressed: #0f6cbd;
+  --colorCompoundBrandStroke: #0f6cbd;
+  --colorCompoundBrandStrokeHover: #115ea3;
+  --colorCompoundBrandStrokePressed: #0f548c;
+  --colorStrokeFocus1: #ffffff;
+  --colorStrokeFocus2: #000000;
+  --colorPaletteRedBackground1: #fdf6f6;
+  --colorPaletteRedBackground2: #f1bbbc;
+  --colorPaletteRedBackground3: #d13438;
+  --colorPaletteRedForeground1: #bc2f32;
+  --colorPaletteRedForeground2: #751d1f;
+  --colorPaletteRedForeground3: #d13438;
+  --colorPaletteRedBorder1: #f1bbbc;
+  --colorPaletteRedBorder2: #d13438;
+  --colorPaletteGreenBackground1: #f1faf1;
+  --colorPaletteGreenBackground2: #9fd89f;
+  --colorPaletteGreenBackground3: #107c10;
+  --colorPaletteGreenForeground1: #0e700e;
+  --colorPaletteGreenForeground2: #094509;
+  --colorPaletteGreenForeground3: #107c10;
+  --colorPaletteGreenBorder1: #9fd89f;
+  --colorPaletteGreenBorder2: #107c10;
+  --colorPaletteDarkOrangeBackground3: #da3b01;
+  --colorPaletteYellowBackground1: #fffef5;
+  --colorPaletteYellowBackground2: #fef7b2;
+  --colorPaletteYellowBackground3: #fde300;
+  --colorPaletteYellowForeground1: #817400;
+  --colorPaletteYellowForeground2: #817400;
+  --colorPaletteYellowForeground3: #fde300;
+  --colorPaletteYellowBorder1: #fef7b2;
+  --colorPaletteYellowBorder2: #fde300;
+  --colorPaletteLightGreenBackground1: #f2fbf2;
+  --colorPaletteLightGreenBackground2: #a7e3a5;
+  --colorPaletteLightGreenBackground3: #13a10e;
+  --colorPaletteLightGreenForeground1: #11910d;
+  --colorPaletteLightGreenForeground2: #0b5a08;
+  --colorPaletteLightGreenForeground3: #13a10e;
+  --colorPaletteLightGreenBorder1: #a7e3a5;
+  --colorPaletteLightGreenBorder2: #13a10e;
+  --colorPaletteMarigoldBackground1: #fefbf4;
+  --colorPaletteMarigoldBackground2: #f9e2ae;
+  --colorPaletteMarigoldBackground3: #eaa300;
+  --colorPaletteMarigoldForeground1: #d39300;
+  --colorPaletteMarigoldForeground2: #835b00;
+  --colorPaletteMarigoldForeground3: #eaa300;
+  --colorPaletteMarigoldBorder1: #f9e2ae;
+  --colorPaletteMarigoldBorder2: #eaa300;
+}
+
+:root[data-theme="dark"] {
+  /* 圆角 */
+  --borderRadiusNone: 0;
+  --borderRadiusSmall: 2px;
+  --borderRadiusMedium: 4px;
+  --borderRadiusLarge: 6px;
+  --borderRadiusXLarge: 8px;
+  --borderRadius2XLarge: 12px;
+  --borderRadiusCircular: 10000px;
+
+  /* 描边宽度 */
+  --strokeWidthThin: 1px;
+  --strokeWidthThick: 2px;
+  --strokeWidthThicker: 3px;
+  --strokeWidthThickest: 4px;
+
+
+  /* 字体 */
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;
+  --fontSizeBase400: 16px;
+  --fontSizeBase500: 20px;
+  --fontSizeBase600: 24px;
+  --fontFamilyBase: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --fontFamilyMonospace: Consolas, 'Courier New', Courier, monospace;
+  --fontFamilyNumeric: Bahnschrift, 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+
+
+  /* 字号/字重 */
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;
+  --fontSizeBase400: 16px;
+  --fontSizeBase500: 20px;
+  --fontSizeBase600: 24px;
+
+  /* 高度层次 elevation */
+  --shadow2: 0 0 2px rgba(0,0,0,0.24), 0 1px 2px rgba(0,0,0,0.28);
+  --shadow4: 0 0 2px rgba(0,0,0,0.24), 0 2px 4px rgba(0,0,0,0.28);
+  --shadow8: 0 0 2px rgba(0,0,0,0.24), 0 4px 8px rgba(0,0,0,0.28);
+  --shadow16: 0 0 2px rgba(0,0,0,0.24), 0 8px 16px rgba(0,0,0,0.28);
+  --shadow28: 0 0 8px rgba(0,0,0,0.24), 0 14px 28px rgba(0,0,0,0.28);
+  --shadow64: 0 0 8px rgba(0,0,0,0.24), 0 32px 64px rgba(0,0,0,0.28);
+
+  /* 动效时长 */
+  --durationUltraFast: 50ms;
+  --durationFaster: 100ms;
+  --durationFast: 150ms;
+  --durationNormal: 200ms;
+  --durationSlow: 300ms;
+  --durationSlower: 400ms;
+
+  /* 缓动曲线 */
+  --curveAccelerateMax: cubic-bezier(0.9,0.1,1,0.2);
+  --curveAccelerateMid: cubic-bezier(1,0,1,1);
+  --curveAccelerateMin: cubic-bezier(0.8,0,0.78,1);
+  --curveDecelerateMax: cubic-bezier(0.1,0.9,0.2,1);
+  --curveDecelerateMid: cubic-bezier(0,0,0,1);
+  --curveDecelerateMin: cubic-bezier(0.33,0,0.1,1);
+  --curveEasyEaseMax: cubic-bezier(0.8,0,0.2,1);
+  --curveEasyEase: cubic-bezier(0.33,0,0.67,1);
+
+  /* 其他(颜色等) */
+  --spacingHorizontalNone: 0;
+  --spacingHorizontalXXS: 2px;
+  --spacingHorizontalXS: 4px;
+  --spacingHorizontalSNudge: 6px;
+  --spacingHorizontalS: 8px;
+  --spacingHorizontalMNudge: 10px;
+  --spacingHorizontalM: 12px;
+  --spacingHorizontalL: 16px;
+  --spacingHorizontalXL: 20px;
+  --spacingHorizontalXXL: 24px;
+  --spacingHorizontalXXXL: 32px;
+  --spacingVerticalNone: 0;
+  --spacingVerticalXXS: 2px;
+  --spacingVerticalXS: 4px;
+  --spacingVerticalSNudge: 6px;
+  --spacingVerticalS: 8px;
+  --spacingVerticalMNudge: 10px;
+  --spacingVerticalM: 12px;
+  --spacingVerticalL: 16px;
+  --spacingVerticalXL: 20px;
+  --spacingVerticalXXL: 24px;
+  --spacingVerticalXXXL: 32px;
+  --colorNeutralForeground1: #ffffff;
+  --colorNeutralForeground1Hover: #ffffff;
+  --colorNeutralForeground1Pressed: #ffffff;
+  --colorNeutralForeground1Selected: #ffffff;
+  --colorNeutralForeground2: #d6d6d6;
+  --colorNeutralForeground2Hover: #ffffff;
+  --colorNeutralForeground2Pressed: #ffffff;
+  --colorNeutralForeground2Selected: #ffffff;
+  --colorNeutralForeground3: #adadad;
+  --colorNeutralForeground3Hover: #d6d6d6;
+  --colorNeutralForeground3Pressed: #d6d6d6;
+  --colorNeutralForeground3Selected: #d6d6d6;
+  --colorNeutralForeground4: #999999;
+  --colorNeutralForegroundDisabled: #5c5c5c;
+  --colorNeutralForegroundInvertedDisabled: rgba(255, 255, 255, 0.4);
+  --colorCompoundBrandForeground1: #479ef5;
+  --colorCompoundBrandForeground1Hover: #62abf5;
+  --colorCompoundBrandForeground1Pressed: #2886de;
+  --colorBrandForeground1: #479ef5;
+  --colorBrandForeground2: #62abf5;
+  --colorBrandForeground2Hover: #96c6fa;
+  --colorBrandForeground2Pressed: #ebf3fc;
+  --colorNeutralForegroundInverted: #242424;
+  --colorNeutralForegroundOnBrand: #ffffff;
+  --colorNeutralForegroundInvertedLink: #ffffff;
+  --colorBrandForegroundInverted: #0f6cbd;
+  --colorBrandForegroundInvertedHover: #115ea3;
+  --colorBrandForegroundInvertedPressed: #0f548c;
+  --colorNeutralBackground1: #292929;
+  --colorNeutralBackground1Hover: #3d3d3d;
+  --colorNeutralBackground1Pressed: #1f1f1f;
+  --colorNeutralBackground1Selected: #383838;
+  --colorNeutralBackground2: #1f1f1f;
+  --colorNeutralBackground2Hover: #333333;
+  --colorNeutralBackground2Pressed: #141414;
+  --colorNeutralBackground2Selected: #2e2e2e;
+  --colorNeutralBackground3: #141414;
+  --colorNeutralBackground3Hover: #292929;
+  --colorNeutralBackground3Pressed: #0a0a0a;
+  --colorNeutralBackground3Selected: #242424;
+  --colorNeutralBackground4: #0a0a0a;
+  --colorNeutralBackground4Hover: #1f1f1f;
+  --colorNeutralBackground4Pressed: #000000;
+  --colorNeutralBackground4Selected: #1a1a1a;
+  --colorNeutralBackground5: #000000;
+  --colorNeutralBackground5Hover: #141414;
+  --colorNeutralBackground5Pressed: #050505;
+  --colorNeutralBackground5Selected: #0f0f0f;
+  --colorNeutralBackground6: #333333;
+  --colorNeutralBackgroundInverted: #ffffff;
+  --colorNeutralBackgroundInvertedHover: #f5f5f5;
+  --colorTransparentBackgroundHover: transparent;
+  --colorTransparentBackgroundPressed: transparent;
+  --colorTransparentBackgroundSelected: transparent;
+  --colorNeutralBackgroundDisabled: #141414;
+  --colorBrandBackground: #115ea3;
+  --colorBrandBackgroundHover: #0f6cbd;
+  --colorBrandBackgroundPressed: #0c3b5e;
+  --colorBrandBackgroundSelected: #0f548c;
+  --colorCompoundBrandBackground: #479ef5;
+  --colorCompoundBrandBackgroundHover: #62abf5;
+  --colorCompoundBrandBackgroundPressed: #2886de;
+  --colorBrandBackground2: #082338;
+  --colorBrandBackground2Hover: #0c3b5e;
+  --colorBrandBackground2Pressed: #061724;
+  --colorBrandBackgroundInverted: #ffffff;
+  --colorBrandBackgroundInvertedHover: #ebf3fc;
+  --colorBrandBackgroundInvertedPressed: #b4d6fa;
+  --colorBrandBackgroundInvertedSelected: #cfe4fa;
+  --colorNeutralStroke1: #666666;
+  --colorNeutralStroke1Hover: #757575;
+  --colorNeutralStroke1Pressed: #6b6b6b;
+  --colorNeutralStroke2: #525252;
+  --colorNeutralStroke3: #3d3d3d;
+  --colorBrandStroke1: #479ef5;
+  --colorBrandStroke2: #0e4775;
+  --colorBrandStroke2Hover: #0e4775;
+  --colorBrandStroke2Pressed: #0a2e4a;
+  --colorCompoundBrandStroke: #479ef5;
+  --colorCompoundBrandStrokeHover: #62abf5;
+  --colorCompoundBrandStrokePressed: #2886de;
+  --colorStrokeFocus1: #000000;
+  --colorStrokeFocus2: #ffffff;
+  --colorPaletteRedBackground1: #3f1011;
+  --colorPaletteRedBackground2: #751d1f;
+  --colorPaletteRedBackground3: #d13438;
+  --colorPaletteRedForeground1: #e37d80;
+  --colorPaletteRedForeground2: #f1bbbc;
+  --colorPaletteRedForeground3: #e37d80;
+  --colorPaletteRedBorder1: #d13438;
+  --colorPaletteRedBorder2: #e37d80;
+  --colorPaletteGreenBackground1: #052505;
+  --colorPaletteGreenBackground2: #094509;
+  --colorPaletteGreenBackground3: #107c10;
+  --colorPaletteGreenForeground1: #54b054;
+  --colorPaletteGreenForeground2: #9fd89f;
+  --colorPaletteGreenForeground3: #9fd89f;
+  --colorPaletteGreenBorder1: #107c10;
+  --colorPaletteGreenBorder2: #9fd89f;
+  --colorPaletteDarkOrangeBackground3: #da3b01;
+  --colorPaletteYellowBackground1: #4c4400;
+  --colorPaletteYellowBackground2: #817400;
+  --colorPaletteYellowBackground3: #fde300;
+  --colorPaletteYellowForeground1: #feee66;
+  --colorPaletteYellowForeground2: #fef7b2;
+  --colorPaletteYellowForeground3: #fdea3d;
+  --colorPaletteYellowBorder1: #fde300;
+  --colorPaletteYellowBorder2: #fdea3d;
+  --colorPaletteLightGreenBackground1: #063004;
+  --colorPaletteLightGreenBackground2: #0b5a08;
+  --colorPaletteLightGreenBackground3: #13a10e;
+  --colorPaletteLightGreenForeground1: #5ec75a;
+  --colorPaletteLightGreenForeground2: #a7e3a5;
+  --colorPaletteLightGreenForeground3: #3db838;
+  --colorPaletteLightGreenBorder1: #13a10e;
+  --colorPaletteLightGreenBorder2: #3db838;
+  --colorPaletteMarigoldBackground1: #463100;
+  --colorPaletteMarigoldBackground2: #835b00;
+  --colorPaletteMarigoldBackground3: #eaa300;
+  --colorPaletteMarigoldForeground1: #f2c661;
+  --colorPaletteMarigoldForeground2: #f9e2ae;
+  --colorPaletteMarigoldForeground3: #efb839;
+  --colorPaletteMarigoldBorder1: #eaa300;
+  --colorPaletteMarigoldBorder2: #efb839;
+}
+@media (prefers-color-scheme: dark) {
+:root:not([data-theme="light"]) {
+  /* 圆角 */
+  --borderRadiusNone: 0;
+  --borderRadiusSmall: 2px;
+  --borderRadiusMedium: 4px;
+  --borderRadiusLarge: 6px;
+  --borderRadiusXLarge: 8px;
+  --borderRadius2XLarge: 12px;
+  --borderRadiusCircular: 10000px;
+
+  /* 描边宽度 */
+  --strokeWidthThin: 1px;
+  --strokeWidthThick: 2px;
+  --strokeWidthThicker: 3px;
+  --strokeWidthThickest: 4px;
+
+
+  /* 字体 */
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;
+  --fontSizeBase400: 16px;
+  --fontSizeBase500: 20px;
+  --fontSizeBase600: 24px;
+  --fontFamilyBase: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --fontFamilyMonospace: Consolas, 'Courier New', Courier, monospace;
+  --fontFamilyNumeric: Bahnschrift, 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+
+
+  /* 字号/字重 */
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;
+  --fontSizeBase400: 16px;
+  --fontSizeBase500: 20px;
+  --fontSizeBase600: 24px;
+
+  /* 高度层次 elevation */
+  --shadow2: 0 0 2px rgba(0,0,0,0.24), 0 1px 2px rgba(0,0,0,0.28);
+  --shadow4: 0 0 2px rgba(0,0,0,0.24), 0 2px 4px rgba(0,0,0,0.28);
+  --shadow8: 0 0 2px rgba(0,0,0,0.24), 0 4px 8px rgba(0,0,0,0.28);
+  --shadow16: 0 0 2px rgba(0,0,0,0.24), 0 8px 16px rgba(0,0,0,0.28);
+  --shadow28: 0 0 8px rgba(0,0,0,0.24), 0 14px 28px rgba(0,0,0,0.28);
+  --shadow64: 0 0 8px rgba(0,0,0,0.24), 0 32px 64px rgba(0,0,0,0.28);
+
+  /* 动效时长 */
+  --durationUltraFast: 50ms;
+  --durationFaster: 100ms;
+  --durationFast: 150ms;
+  --durationNormal: 200ms;
+  --durationSlow: 300ms;
+  --durationSlower: 400ms;
+
+  /* 缓动曲线 */
+  --curveAccelerateMax: cubic-bezier(0.9,0.1,1,0.2);
+  --curveAccelerateMid: cubic-bezier(1,0,1,1);
+  --curveAccelerateMin: cubic-bezier(0.8,0,0.78,1);
+  --curveDecelerateMax: cubic-bezier(0.1,0.9,0.2,1);
+  --curveDecelerateMid: cubic-bezier(0,0,0,1);
+  --curveDecelerateMin: cubic-bezier(0.33,0,0.1,1);
+  --curveEasyEaseMax: cubic-bezier(0.8,0,0.2,1);
+  --curveEasyEase: cubic-bezier(0.33,0,0.67,1);
+
+  /* 其他(颜色等) */
+  --spacingHorizontalNone: 0;
+  --spacingHorizontalXXS: 2px;
+  --spacingHorizontalXS: 4px;
+  --spacingHorizontalSNudge: 6px;
+  --spacingHorizontalS: 8px;
+  --spacingHorizontalMNudge: 10px;
+  --spacingHorizontalM: 12px;
+  --spacingHorizontalL: 16px;
+  --spacingHorizontalXL: 20px;
+  --spacingHorizontalXXL: 24px;
+  --spacingHorizontalXXXL: 32px;
+  --spacingVerticalNone: 0;
+  --spacingVerticalXXS: 2px;
+  --spacingVerticalXS: 4px;
+  --spacingVerticalSNudge: 6px;
+  --spacingVerticalS: 8px;
+  --spacingVerticalMNudge: 10px;
+  --spacingVerticalM: 12px;
+  --spacingVerticalL: 16px;
+  --spacingVerticalXL: 20px;
+  --spacingVerticalXXL: 24px;
+  --spacingVerticalXXXL: 32px;
+  --colorNeutralForeground1: #ffffff;
+  --colorNeutralForeground1Hover: #ffffff;
+  --colorNeutralForeground1Pressed: #ffffff;
+  --colorNeutralForeground1Selected: #ffffff;
+  --colorNeutralForeground2: #d6d6d6;
+  --colorNeutralForeground2Hover: #ffffff;
+  --colorNeutralForeground2Pressed: #ffffff;
+  --colorNeutralForeground2Selected: #ffffff;
+  --colorNeutralForeground3: #adadad;
+  --colorNeutralForeground3Hover: #d6d6d6;
+  --colorNeutralForeground3Pressed: #d6d6d6;
+  --colorNeutralForeground3Selected: #d6d6d6;
+  --colorNeutralForeground4: #999999;
+  --colorNeutralForegroundDisabled: #5c5c5c;
+  --colorNeutralForegroundInvertedDisabled: rgba(255, 255, 255, 0.4);
+  --colorCompoundBrandForeground1: #479ef5;
+  --colorCompoundBrandForeground1Hover: #62abf5;
+  --colorCompoundBrandForeground1Pressed: #2886de;
+  --colorBrandForeground1: #479ef5;
+  --colorBrandForeground2: #62abf5;
+  --colorBrandForeground2Hover: #96c6fa;
+  --colorBrandForeground2Pressed: #ebf3fc;
+  --colorNeutralForegroundInverted: #242424;
+  --colorNeutralForegroundOnBrand: #ffffff;
+  --colorNeutralForegroundInvertedLink: #ffffff;
+  --colorBrandForegroundInverted: #0f6cbd;
+  --colorBrandForegroundInvertedHover: #115ea3;
+  --colorBrandForegroundInvertedPressed: #0f548c;
+  --colorNeutralBackground1: #292929;
+  --colorNeutralBackground1Hover: #3d3d3d;
+  --colorNeutralBackground1Pressed: #1f1f1f;
+  --colorNeutralBackground1Selected: #383838;
+  --colorNeutralBackground2: #1f1f1f;
+  --colorNeutralBackground2Hover: #333333;
+  --colorNeutralBackground2Pressed: #141414;
+  --colorNeutralBackground2Selected: #2e2e2e;
+  --colorNeutralBackground3: #141414;
+  --colorNeutralBackground3Hover: #292929;
+  --colorNeutralBackground3Pressed: #0a0a0a;
+  --colorNeutralBackground3Selected: #242424;
+  --colorNeutralBackground4: #0a0a0a;
+  --colorNeutralBackground4Hover: #1f1f1f;
+  --colorNeutralBackground4Pressed: #000000;
+  --colorNeutralBackground4Selected: #1a1a1a;
+  --colorNeutralBackground5: #000000;
+  --colorNeutralBackground5Hover: #141414;
+  --colorNeutralBackground5Pressed: #050505;
+  --colorNeutralBackground5Selected: #0f0f0f;
+  --colorNeutralBackground6: #333333;
+  --colorNeutralBackgroundInverted: #ffffff;
+  --colorNeutralBackgroundInvertedHover: #f5f5f5;
+  --colorTransparentBackgroundHover: transparent;
+  --colorTransparentBackgroundPressed: transparent;
+  --colorTransparentBackgroundSelected: transparent;
+  --colorNeutralBackgroundDisabled: #141414;
+  --colorBrandBackground: #115ea3;
+  --colorBrandBackgroundHover: #0f6cbd;
+  --colorBrandBackgroundPressed: #0c3b5e;
+  --colorBrandBackgroundSelected: #0f548c;
+  --colorCompoundBrandBackground: #479ef5;
+  --colorCompoundBrandBackgroundHover: #62abf5;
+  --colorCompoundBrandBackgroundPressed: #2886de;
+  --colorBrandBackground2: #082338;
+  --colorBrandBackground2Hover: #0c3b5e;
+  --colorBrandBackground2Pressed: #061724;
+  --colorBrandBackgroundInverted: #ffffff;
+  --colorBrandBackgroundInvertedHover: #ebf3fc;
+  --colorBrandBackgroundInvertedPressed: #b4d6fa;
+  --colorBrandBackgroundInvertedSelected: #cfe4fa;
+  --colorNeutralStroke1: #666666;
+  --colorNeutralStroke1Hover: #757575;
+  --colorNeutralStroke1Pressed: #6b6b6b;
+  --colorNeutralStroke2: #525252;
+  --colorNeutralStroke3: #3d3d3d;
+  --colorBrandStroke1: #479ef5;
+  --colorBrandStroke2: #0e4775;
+  --colorBrandStroke2Hover: #0e4775;
+  --colorBrandStroke2Pressed: #0a2e4a;
+  --colorCompoundBrandStroke: #479ef5;
+  --colorCompoundBrandStrokeHover: #62abf5;
+  --colorCompoundBrandStrokePressed: #2886de;
+  --colorStrokeFocus1: #000000;
+  --colorStrokeFocus2: #ffffff;
+  --colorPaletteRedBackground1: #3f1011;
+  --colorPaletteRedBackground2: #751d1f;
+  --colorPaletteRedBackground3: #d13438;
+  --colorPaletteRedForeground1: #e37d80;
+  --colorPaletteRedForeground2: #f1bbbc;
+  --colorPaletteRedForeground3: #e37d80;
+  --colorPaletteRedBorder1: #d13438;
+  --colorPaletteRedBorder2: #e37d80;
+  --colorPaletteGreenBackground1: #052505;
+  --colorPaletteGreenBackground2: #094509;
+  --colorPaletteGreenBackground3: #107c10;
+  --colorPaletteGreenForeground1: #54b054;
+  --colorPaletteGreenForeground2: #9fd89f;
+  --colorPaletteGreenForeground3: #9fd89f;
+  --colorPaletteGreenBorder1: #107c10;
+  --colorPaletteGreenBorder2: #9fd89f;
+  --colorPaletteDarkOrangeBackground3: #da3b01;
+  --colorPaletteYellowBackground1: #4c4400;
+  --colorPaletteYellowBackground2: #817400;
+  --colorPaletteYellowBackground3: #fde300;
+  --colorPaletteYellowForeground1: #feee66;
+  --colorPaletteYellowForeground2: #fef7b2;
+  --colorPaletteYellowForeground3: #fdea3d;
+  --colorPaletteYellowBorder1: #fde300;
+  --colorPaletteYellowBorder2: #fdea3d;
+  --colorPaletteLightGreenBackground1: #063004;
+  --colorPaletteLightGreenBackground2: #0b5a08;
+  --colorPaletteLightGreenBackground3: #13a10e;
+  --colorPaletteLightGreenForeground1: #5ec75a;
+  --colorPaletteLightGreenForeground2: #a7e3a5;
+  --colorPaletteLightGreenForeground3: #3db838;
+  --colorPaletteLightGreenBorder1: #13a10e;
+  --colorPaletteLightGreenBorder2: #3db838;
+  --colorPaletteMarigoldBackground1: #463100;
+  --colorPaletteMarigoldBackground2: #835b00;
+  --colorPaletteMarigoldBackground3: #eaa300;
+  --colorPaletteMarigoldForeground1: #f2c661;
+  --colorPaletteMarigoldForeground2: #f9e2ae;
+  --colorPaletteMarigoldForeground3: #efb839;
+  --colorPaletteMarigoldBorder1: #eaa300;
+  --colorPaletteMarigoldBorder2: #efb839;
+}
+}
+
+/* 语义状态色别名 */
+:root {
+  --statusUpBackground: var(--colorPaletteGreenBackground3);
+  --statusUpForeground: var(--colorPaletteGreenForeground1);
+  --statusDownBackground: var(--colorPaletteRedBackground3);
+  --statusDownForeground: var(--colorPaletteRedForeground1);
+  --statusWarnBackground: var(--colorPaletteMarigoldBackground3);
+  --statusWarnForeground: var(--colorPaletteMarigoldForeground1);
+  --statusIdleBackground: var(--colorPaletteLightGreenBackground3);
+  --statusIdleForeground: var(--colorPaletteLightGreenForeground1);
+}
