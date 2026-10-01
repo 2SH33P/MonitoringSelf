@@ -639,6 +639,24 @@ svg.icon { flex: none; }
   gap: var(--spacingHorizontalXXS);
 }
 
+/* ---------- 当前状态控制台 / 同步卡 ---------- */
+.actions-row { display: flex; align-items: center; gap: var(--spacingHorizontalS); flex-wrap: wrap; }
+
+.now-hint {
+  display: block;
+  padding: var(--spacingHorizontalS) var(--spacingHorizontalM);
+  margin-bottom: var(--spacingVerticalS);
+  border-radius: var(--borderRadiusMedium);
+  background: var(--colorBrandBackground2);
+  color: var(--colorBrandForeground2);
+  font-size: var(--fontSizeBase200);
+  line-height: 16px;
+}
+
+.now-hint[hidden] { display: none; }
+.cell-note { margin-top: var(--spacingVerticalXS); }
+.navitem--bar { height: 32px; }
+
 /* ---------- 对话框 ---------- */
 .dialog-backdrop {
   position: fixed;
@@ -837,9 +855,71 @@ svg.icon { flex: none; }
   .metric:nth-child(4) { border-top: 1px solid var(--colorNeutralStroke2); }
 }
 
-@media (max-width: 640px) {
-  .table th:nth-child(2), .table td:nth-child(2),
-  .table th:nth-child(4), .table td:nth-child(4) { display: none; }
+/* ---------- 手机排版（≤768px）：单列 / 卡片化 / 触达目标 ≥ 40px ---------- */
+@media (max-width: 768px) {
+  .commandbar { padding: 0 var(--spacingHorizontalM); }
+  .commandbar__title { font-size: var(--fontSizeBase300); }
+  .navitem--bar { display: none; }
+  #me-presence { display: none; }
+
+  .content { padding: var(--spacingHorizontalM) var(--spacingHorizontalM) var(--spacingVerticalXXXL); }
+  .stack { gap: var(--spacingVerticalM); }
+  .grid-2 { gap: var(--spacingVerticalM); }
+  .card__head { padding: var(--spacingHorizontalM); }
+  .card__body, .composer__body, .composer__footer, .list-toolbar--card, .pager--card { padding-left: var(--spacingHorizontalM); padding-right: var(--spacingHorizontalM); }
+
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric { padding: var(--spacingHorizontalM); }
+  .metric__value { font-size: var(--fontSizeBase500); line-height: 28px; }
+
+  .hero__activity { font-size: var(--fontSizeBase400); line-height: 22px; }
+  .hero__timer { font-size: var(--fontSizeBase500); line-height: 28px; }
+  .meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacingHorizontalM); }
+  .identity { gap: var(--spacingHorizontalS); }
+
+  .btn { min-height: 40px; }
+  .btn--icon { width: 40px; }
+  .tool { height: 36px; }
+  .pagebtn { min-width: 40px; height: 40px; }
+  .actions-row { width: 100%; }
+  .actions-row .btn { flex: 1 1 auto; }
+
+  .search { flex: 1 1 100%; max-width: none; height: 40px; }
+  .list-toolbar { gap: var(--spacingHorizontalS); }
+  .pager { justify-content: center; text-align: center; }
+  .pager__pages { flex-wrap: wrap; justify-content: center; }
+
+  .dialog { padding: var(--spacingHorizontalL); }
+  .toasts { left: var(--spacingHorizontalM); right: var(--spacingHorizontalM); bottom: var(--spacingVerticalM); }
+  .toast { min-width: 0; max-width: none; }
+
+  /* 记录表格 → 卡片列表（每行一条记录） */
+  .table-scroll { overflow: visible; }
+  .table { min-width: 0; }
+  .table thead { display: none; }
+  .table, .table tbody, .table tr, .table td { display: block; width: auto; }
+  .table tbody tr {
+    padding: var(--spacingHorizontalM);
+    border-bottom: 1px solid var(--colorNeutralStroke2);
+  }
+  .table tbody tr:last-child { border-bottom: 0; }
+  .table tbody tr:hover td { background: transparent; }
+  .table td { padding: 0; border: 0; }
+  .table td + td { margin-top: var(--spacingVerticalS); }
+  .table td[data-label] { display: block; text-align: right; }
+  .table td[data-label]::before {
+    content: attr(data-label);
+    float: left;
+    font-size: var(--fontSizeBase200);
+    line-height: 20px;
+    color: var(--colorNeutralForeground3);
+  }
+  .table td:last-child { white-space: normal; }
+  .row-actions { justify-content: flex-end; }
+}
+
+@media (max-width: 480px) {
+  .commandbar .rail__logo { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

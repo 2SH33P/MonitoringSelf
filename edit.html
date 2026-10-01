@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Monitoring · 编辑状态</title>
 <meta name="color-scheme" content="light dark">
-<!-- 首屏前先定主题，避免切换页面时闪白 -->
 <script>try{var t=localStorage.getItem("monitoring:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
 window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():null}).catch(function(){return null});</script>
-<link rel="prefetch" href="index.html">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
+<link rel="prefetch" href="index.html">
 <link rel="stylesheet" href="assets/tokens.min.css">
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
+<!-- 本地管理页：不会部署到 GitHub Pages（Pages 白名单只含 index.html 与只读资源） -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 20 20"><path d="M3.5 9.2 10 3.6l6.5 5.6V16a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8 17v-4.2h4V17"/></symbol>
   <symbol id="i-edit" viewBox="0 0 20 20"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></symbol>
@@ -21,9 +21,8 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
   <symbol id="i-tag" viewBox="0 0 20 20"><path d="M3.2 10.9V4.4a1.2 1.2 0 0 1 1.2-1.2h6.5a1.2 1.2 0 0 1 .85.35l5.1 5.1a1.2 1.2 0 0 1 0 1.7l-6.25 6.25a1.2 1.2 0 0 1-1.7 0l-5.1-5.1a1.2 1.2 0 0 1-.35-.85z"/><circle cx="6.6" cy="6.6" r="1.1"/></symbol>
   <symbol id="i-note" viewBox="0 0 20 20"><path d="M5.2 3h9.6a1.2 1.2 0 0 1 1.2 1.2v11.6a1.2 1.2 0 0 1-1.2 1.2H5.2A1.2 1.2 0 0 1 4 15.8V4.2A1.2 1.2 0 0 1 5.2 3z"/><path d="M7 7h6M7 10h6M7 13h3.5"/></symbol>
   <symbol id="i-pulse" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.4 10h1.8l1.2-2.6 1.6 5 1.2-2.4h1.4"/></symbol>
-  <symbol id="i-info" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 9v4.6M10 6.5h.01"/></symbol>
-  <symbol id="i-error" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6.4v4.4M10 13.4h.01"/></symbol>
   <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.8 10.2l2.2 2.2 4.2-4.6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6.4v4.4M10 13.4h.01"/></symbol>
   <symbol id="i-moon" viewBox="0 0 20 20"><path d="M16.6 12.1A7 7 0 0 1 7.9 3.4a7 7 0 1 0 8.7 8.7z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.6v1.6M10 15.8v1.6M17.4 10h-1.6M4.2 10H2.6M15.2 4.8l-1.1 1.1M5.9 14.1l-1.1 1.1M15.2 15.2l-1.1-1.1M5.9 5.9 4.8 4.8"/></symbol>
   <symbol id="i-upload" viewBox="0 0 20 20"><path d="M10 12.8V3.4M6.4 7 10 3.4 13.6 7"/><path d="M4 12.4v3.4a1.2 1.2 0 0 0 1.2 1.2h9.6a1.2 1.2 0 0 0 1.2-1.2v-3.4"/></symbol>
@@ -76,46 +75,48 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
         </a>
       </nav>
       <span class="commandbar__spacer"></span>
-      <div class="commandbar__group">
-        <a class="navitem" style="height:32px" href="index.html">
-          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
-          <span>查看总览</span>
-        </a>
-        <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题"></button>
-        <button class="btn btn--secondary" id="save-local" type="button">
-          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
-          保存到本地
-        </button>
-        <button class="btn btn--secondary" id="push-btn" type="button">
-          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
-          发布到 GitHub
-        </button>
-      </div>
+      <a class="navitem navitem--bar" href="index.html">
+        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+        <span>查看总览</span>
+      </a>
+      <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题"></button>
     </header>
 
     <main class="content">
       <div class="stack">
+        <!-- 1. 当前状态控制台：开始 / 结束 的唯一主操作区 -->
+        <section class="card card--flush" aria-live="polite">
+          <div class="card__head">
+            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pulse"></use></svg>
+            <span class="card__title">当前状态</span>
+            <span class="grow"></span>
+            <span class="caption1" id="sync-flag"></span>
+          </div>
+          <div class="card__body" id="now-body"></div>
+        </section>
+
         <div class="grid-2">
-          <!-- 左：QQ 空间式发表框 -->
+          <!-- 2. 左：开始新状态 / 补记 / 编辑 -->
           <section class="composer" aria-label="状态编辑器">
             <div class="composer__tabs" role="tablist">
-              <button class="composer__tab" role="tab" aria-selected="true" id="composer-tab">发表状态</button>
-              <span class="composer__tab composer__tab--muted">记录历史</span>
+              <button class="composer__tab" role="tab" aria-selected="true" id="composer-tab">开始新状态</button>
+              <span class="composer__tab composer__tab--muted">开始 = 自动结束上一条</span>
             </div>
 
             <div class="composer__body">
+              <div class="now-hint" id="running-hint" hidden></div>
               <label class="hide" for="activity">活动内容</label>
               <textarea class="composer__editable" id="activity" maxlength="60"
-                placeholder="分享这一刻在做什么…（活动内容，最多 60 字）"></textarea>
+                placeholder="此刻要开始做什么？（最多 60 字）"></textarea>
 
               <div class="composer__toolbar">
                 <button class="tool" type="button" data-toggle="time" aria-expanded="true">
                   <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
-                  时间范围
+                  时间
                 </button>
                 <button class="tool" type="button" data-toggle="kind" aria-expanded="true">
                   <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-tag"></use></svg>
-                  活动类型
+                  类型
                 </button>
                 <button class="tool" type="button" data-toggle="note" aria-expanded="false">
                   <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-note"></use></svg>
@@ -160,12 +161,12 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
               <div class="row">
                 <button class="btn btn--subtle hide" id="cancel-edit" type="button">取消编辑</button>
                 <button class="btn btn--subtle" id="reset-btn" type="button">清空</button>
-                <button class="btn btn--primary" id="submit-btn" type="button">发表</button>
+                <button class="btn btn--secondary" id="submit-btn" type="button">开始</button>
               </div>
             </div>
           </section>
 
-          <!-- 右：同步 / 身份 -->
+          <!-- 3. 右：同步 / 身份 -->
           <div class="stack">
             <section class="card card--flush">
               <div class="card__head">
@@ -174,30 +175,42 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
               </div>
               <div class="card__body stack-s">
                 <div class="row" id="sync-state"></div>
-                <div class="row">
+                <div class="actions-row">
+                  <button class="btn btn--secondary" id="push-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+                    <span>发布到 GitHub</span>
+                  </button>
                   <button class="btn btn--subtle" id="pull-btn" type="button">
                     <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sync"></use></svg>
-                    从 GitHub 拉取
+                    <span>从 GitHub 拉取</span>
+                  </button>
+                  <button class="btn btn--subtle" id="save-local" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+                    <span>保存到本地</span>
                   </button>
                   <button class="btn btn--subtle" id="sync-btn" type="button">
                     <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-options"></use></svg>
-                    同步设置
+                    <span>同步设置</span>
                   </button>
                 </div>
+                <label class="check" for="auto-sync">
+                  <input type="checkbox" id="auto-sync">
+                  自动同步：每次开始 / 结束 / 修改后自动提交 data/status.json 到远程仓库
+                </label>
                 <hr class="divider">
-                <div class="row">
+                <div class="actions-row">
                   <button class="btn btn--secondary" id="export-btn" type="button">
                     <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
-                    导出 JSON
+                    <span>导出 JSON</span>
                   </button>
                   <button class="btn btn--secondary" id="import-btn" type="button">
                     <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
-                    导入 JSON
+                    <span>导入 JSON</span>
                   </button>
                   <input class="hide" type="file" id="import-file" accept="application/json">
                   <button class="btn btn--danger" id="clear-btn" type="button">
                     <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-delete"></use></svg>
-                    清空全部记录
+                    <span>清空全部记录</span>
                   </button>
                 </div>
               </div>
@@ -222,6 +235,7 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
           </div>
         </div>
 
+        <!-- 4. 记录管理 -->
         <section class="card card--flush">
           <div class="card__head">
             <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
@@ -261,7 +275,7 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
       <span class="avatar" aria-hidden="true"><svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#i-sync"></use></svg></span>
       <div class="stack-xs">
         <h2 class="subtitle2" id="sync-title">GitHub 同步设置</h2>
-        <p class="caption1">保存时直接向仓库提交 <span class="mono">data/status.json</span>，GitHub Pages 会自动重新发布。Token 只存在本机 localStorage；建议使用只勾选 <span class="mono">Contents: Read and write</span> 的细粒度 Token。</p>
+        <p class="caption1">每次开始 / 结束 / 修改都会重新生成 <span class="mono">data/status.json</span> 的内容并提交到仓库，GitHub Pages 随后自动重新发布。Token 只存在本机 localStorage；建议使用只勾选 <span class="mono">Contents: Read and write</span> 的细粒度 Token。</p>
       </div>
     </div>
     <div class="field">
@@ -284,6 +298,10 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
       <label class="field__label" for="cfg-token">个人访问令牌（PAT）</label>
       <input class="input" id="cfg-token" type="password" placeholder="github_pat_..." autocomplete="off">
     </div>
+    <label class="check" for="cfg-auto">
+      <input type="checkbox" id="cfg-auto">
+      保存后开启自动同步
+    </label>
     <div class="row row--between">
       <button class="btn btn--danger" id="sync-clear" type="button">清除配置</button>
       <span class="grow"></span>
