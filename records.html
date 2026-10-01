@@ -17,9 +17,7 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
   <symbol id="i-home" viewBox="0 0 20 20"><path d="M3.5 9.2 10 3.6l6.5 5.6V16a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8 17v-4.2h4V17"/></symbol>
   <symbol id="i-edit" viewBox="0 0 20 20"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></symbol>
   <symbol id="i-clock" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5.8V10l3 1.8"/></symbol>
-  <symbol id="i-pulse" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.4 10h1.8l1.2-2.6 1.6 5 1.2-2.4h1.4"/></symbol>
   <symbol id="i-options" viewBox="0 0 20 20"><path d="M3.4 6.6h2.3M9.5 6.6h7.1M3.4 13.4h7.1M14.3 13.4h2.3"/><circle cx="7.6" cy="6.6" r="1.9"/><circle cx="12.4" cy="13.4" r="1.9"/></symbol>
-  <symbol id="i-stop" viewBox="0 0 20 20"><rect x="5.4" y="5.4" width="9.2" height="9.2" rx="1.6"/></symbol>
   <symbol id="i-delete" viewBox="0 0 20 20"><path d="M4.2 6.2h11.6"/><path d="M8 6.2V4.6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.6"/><path d="M6.4 6.2l.6 9.4a1.1 1.1 0 0 0 1.1 1h3.8a1.1 1.1 0 0 0 1.1-1l.6-9.4"/></symbol>
   <symbol id="i-search" viewBox="0 0 20 20"><circle cx="8.8" cy="8.8" r="5.2"/><path d="M12.6 12.6 17 17"/></symbol>
   <symbol id="i-chevron-left" viewBox="0 0 20 20"><path d="M12 5.6 7.6 10 12 14.4"/></symbol>
@@ -90,15 +88,6 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
 
     <main class="content">
       <div class="stack">
-        <section class="card card--flush" aria-live="polite">
-          <div class="card__head">
-            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pulse"></use></svg>
-            <span class="card__title">当前状态</span>
-            <span class="grow"></span>
-          </div>
-          <div class="card__body" id="now-body"></div>
-        </section>
-
         <section class="card card--flush">
           <div class="card__head">
             <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
