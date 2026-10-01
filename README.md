@@ -65,3 +65,9 @@ Token 仅保存在本机 `localStorage`，不会写入仓库。公共电脑上�
 - 「导出 JSON」得到的文件可直接覆盖 `data/status.json` 后提交；「导入 JSON」按 id 合并。
 - 观看页每 5 分钟静默刷新一次数据，无需手动刷新。
 - 无第三方依赖、无 CDN、无构建步骤；页面总体积 < 40KB。
+
+## 测试
+
+```bash
+node tests/store.test.mjs   # 数据层断言（当前状态推导 / 统计 / 合并 / 格式化）
+```
