@@ -100,6 +100,7 @@
 
   function commit(next, message) {
     data = M.saveLocal(next);
+    listState.page = 1;
     renderRecords();
     renderPreview();
     renderSyncState();
@@ -107,15 +108,25 @@
   }
 
   /* ---------------- 渲染 ---------------- */
+  /* 记录管理的搜索 / 翻页状态（只影响列表，不影响数据） */
+  const listState = { q: '', page: 1, size: 8 };
+
   function renderRecords() {
     const now = Date.now();
-    const body = $('#records');
-    const list = [...data.records].sort(M.byStartDesc);
-    $('#count-hint').textContent = list.length ? `共 ${list.length} 条 · 点「结束」可给进行中的记录补上终止时间` : '';
-    $('#records-empty').innerHTML = list.length
+    $('#count-hint').textContent = data.records.length
+      ? `共 ${data.records.length} 条 · 点「结束」可给进行中的记录补上终止时间`
+      : '';
+    const matched = UI.filterRecords(data.records, listState.q);
+    const pg = UI.paginate(matched, listState.page, listState.size);
+    listState.page = pg.page;
+    $('#records-hint').textContent = listState.q ? `匹配 ${pg.total} 条` : '按起始时间倒序';
+    $('#records-empty').innerHTML = pg.total
       ? ''
-      : `<div class="empty">${UI.icon('clock', 32)}<p class="subtitle2">还没有任何记录</p><p class="body1 muted">在上面写下这一刻在做什么，然后点「发表」。</p></div>`;
-    body.innerHTML = list
+      : `<div class="empty">${UI.icon('clock', 32)}<p class="subtitle2">${listState.q ? '没有匹配的记录' : '还没有任何记录'}</p><p class="body1 muted">${
+          listState.q ? '换个关键词试试。' : '在上面写下这一刻在做什么，然后点「发表」。'
+        }</p></div>`;
+    $('#records-pager').innerHTML = UI.pagerHtml(pg.page, pg.pages, pg.total, pg.size);
+    $('#records').innerHTML = pg.items
       .map((r) => {
         const running = !r.end || M.ts(r.end) > now;
         const p = UI.presenceOf(r, now);
@@ -277,6 +288,25 @@
       if (btn.dataset.act === 'delete') {
         if (confirm(`删除「${rec.activity}」这条记录？`)) commit(M.removeRecord(data, rec.id), '记录已删除');
       }
+    });
+
+    // 记录列表的搜索与翻页
+    let searchTimer = 0;
+    $('#records-q').addEventListener('input', (e) => {
+      clearTimeout(searchTimer);
+      const value = e.target.value;
+      searchTimer = setTimeout(() => {
+        listState.q = value;
+        listState.page = 1;
+        renderRecords();
+      }, 150);
+    });
+    $('#records-pager').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-page]');
+      if (!btn || btn.disabled) return;
+      listState.page = Number(btn.dataset.page);
+      renderRecords();
+      $('#records').scrollIntoView({ block: 'nearest' });
     });
 
     $('#owner-name').addEventListener('change', saveOwner);

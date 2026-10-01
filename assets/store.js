@@ -172,6 +172,16 @@
   }
 
   async function fetchFile(url = DATA_FILE) {
+    // 复用 <head> 里提前发起的预取（首屏不额外等一下）
+    if (url === DATA_FILE && global.__DATA__ && !fetchFile.usedPreload) {
+      fetchFile.usedPreload = true;
+      try {
+        const raw = await global.__DATA__;
+        if (raw) return normalize(raw);
+      } catch (e) {
+        /* 落到真实请求 */
+      }
+    }
     const res = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return normalize(await res.json());

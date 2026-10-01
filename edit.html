@@ -6,7 +6,8 @@
 <title>Monitoring · 编辑状态</title>
 <meta name="color-scheme" content="light dark">
 <!-- 首屏前先定主题，避免切换页面时闪白 -->
-<script>try{var t=localStorage.getItem("monitoring:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>try{var t=localStorage.getItem("monitoring:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
+window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():null}).catch(function(){return null});</script>
 <link rel="prefetch" href="index.html">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
 <link rel="stylesheet" href="assets/tokens.min.css">
@@ -32,6 +33,9 @@
   <symbol id="i-stop" viewBox="0 0 20 20"><rect x="5.4" y="5.4" width="9.2" height="9.2" rx="1.6"/></symbol>
   <symbol id="i-delete" viewBox="0 0 20 20"><path d="M4.2 6.2h11.6"/><path d="M8 6.2V4.6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.6"/><path d="M6.4 6.2l.6 9.4a1.1 1.1 0 0 0 1.1 1h3.8a1.1 1.1 0 0 0 1.1-1l.6-9.4"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 20 20"><path d="M5.6 8l4.4 4.4L14.4 8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 20 20"><circle cx="8.8" cy="8.8" r="5.2"/><path d="M12.6 12.6 17 17"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 20 20"><path d="M12 5.6 7.6 10 12 14.4"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 20 20"><path d="M8 5.6 12.4 10 8 14.4"/></symbol>
   <symbol id="i-person" viewBox="0 0 20 20"><circle cx="10" cy="7.2" r="3.2"/><path d="M4 16.6c.6-3.2 3-4.6 6-4.6s5.4 1.4 6 4.6"/></symbol>
 </svg>
 
@@ -63,6 +67,14 @@
   <div class="main">
     <header class="commandbar">
       <span class="commandbar__title">编辑状态</span>
+      <nav class="commandbar__nav" aria-label="移动端导航">
+        <a class="btn btn--subtle btn--icon" href="index.html" aria-label="状态总览" title="状态总览">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+        </a>
+        <a class="btn btn--subtle btn--icon" href="edit.html" aria-current="page" aria-label="编辑状态" title="编辑状态">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+        </a>
+      </nav>
       <span class="commandbar__spacer"></span>
       <div class="commandbar__group">
         <a class="navitem" style="height:32px" href="index.html">
@@ -239,6 +251,13 @@
             <span class="grow"></span>
             <span class="caption1" id="count-hint"></span>
           </div>
+          <div class="list-toolbar list-toolbar--card">
+            <label class="search" for="records-q">
+              <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+              <input id="records-q" type="search" placeholder="搜索活动内容、备注、类型或日期" autocomplete="off">
+            </label>
+            <span class="caption1" id="records-hint"></span>
+          </div>
           <div class="table-scroll">
             <table class="table">
               <thead>
@@ -248,6 +267,7 @@
             </table>
           </div>
           <div id="records-empty"></div>
+          <div class="pager pager--card" id="records-pager"></div>
         </section>
 
         <p class="caption1" id="page-footer"></p>

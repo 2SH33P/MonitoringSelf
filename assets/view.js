@@ -1,4 +1,4 @@
-/* 观看页：加载数据 → 渲染总览 / 指标 / 时间线，并让「已持续」秒级走动。 */
+/* 观看页（只读）：加载数据 → 渲染当前状态 / 指标 / 记录列表，支持搜索与翻页。 */
 (function () {
   'use strict';
   const M = window.Monitoring;
@@ -6,6 +6,21 @@
   const $ = (s) => document.querySelector(s);
 
   let data = null;
+  const state = { q: '', page: 1, size: UI.PAGE_SIZE };
+  let queryTimer = 0;
+
+  function renderList() {
+    const list = UI.filterRecords(data.records, state.q);
+    const pg = UI.paginate(list, state.page, state.size);
+    state.page = pg.page;
+    $('#timeline').innerHTML = UI.timelineHtml(
+      pg.items,
+      Date.now(),
+      state.q ? '没有匹配的记录，换个关键词试试。' : undefined
+    );
+    $('#pager').innerHTML = UI.pagerHtml(pg.page, pg.pages, pg.total, pg.size);
+    $('#result-hint').textContent = state.q ? `匹配 ${pg.total} 条` : '按起始时间倒序';
+  }
 
   function paint() {
     const now = Date.now();
@@ -18,36 +33,58 @@
     UI.render(document, data, now);
     $('#metrics').innerHTML = UI.metricsHtml(data, now);
 
-    // 记录集合变化才重排时间线；否则只刷新时长文案，避免打断阅读
-    const sig = data.records.map((r) => r.id + r.updatedAt).join('|');
-    if (sig !== paint.sig) {
-      paint.sig = sig;
-      $('#timeline').innerHTML = UI.timelineHtml(data.records, now);
-      return;
-    }
-    const list = [...data.records].sort(M.byStartDesc);
+    // 只有「筛选 / 页码 / 记录集合」变化才重排列表，否则仅刷新时长文案
+    const sig = [state.q, state.page, state.size, data.records.map((r) => r.id + r.updatedAt).join(',')].join('|');
+    if (sig === paint.sig) return;
+    paint.sig = sig;
+    renderList();
+  }
+
+  function wire() {
+    $('#q').addEventListener('input', (e) => {
+      clearTimeout(queryTimer);
+      const value = e.target.value;
+      queryTimer = setTimeout(() => {
+        state.q = value;
+        state.page = 1;
+        paint();
+      }, 150);
+    });
+
+    $('#pager').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-page]');
+      if (!btn || btn.disabled) return;
+      state.page = Number(btn.dataset.page);
+      paint();
+      $('#timeline').scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  function tick() {
+    const now = Date.now();
+    const { state: st, record } = M.currentState(data);
+    const node = document.querySelector('[data-hero-timer]');
+    if (node && record && st === 'running') node.textContent = M.fmtDuration(M.duration(record));
     document.querySelectorAll('[data-dur]').forEach((span) => {
-      const r = list[+span.dataset.dur];
-      if (r) span.textContent = `· ${M.fmtDuration(M.duration(r, now))}`;
+      const rec = data.records.find((r) => r.id === span.dataset.dur);
+      if (rec && !rec.end) span.textContent = `· ${M.fmtDuration(M.duration(rec, now))}`;
     });
   }
 
   async function boot() {
     UI.initTheme();
-    UI.prefetchLinks();
     const hasLocal = !!M.loadLocal();
     $('#local-banner').hidden = !hasLocal;
     data = await M.load();
+    wire();
     paint();
     UI.mountFooter('#page-footer', data);
 
-    // 秒级刷新「已持续」；每 60 秒整块重绘一次（跨越整天 / 记录自动收尾）
+    // 秒级只更新时长文案（不重排 DOM）；每 60 秒整块重绘（跨天、记录自动收尾）
+    setInterval(tick, 1000);
     setInterval(() => {
-      const { state, record } = M.currentState(data);
-      const node = document.querySelector('[data-hero-timer]');
-      if (node && record && state === 'running') node.textContent = M.fmtDuration(M.duration(record));
-    }, 1000);
-    setInterval(paint, 60000);
+      if (!document.hidden) paint();
+    }, 60000);
 
     // 只读访客：每 5 分钟静默拉取最新数据文件
     if (!hasLocal) {

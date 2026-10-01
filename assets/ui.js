@@ -68,7 +68,7 @@
     }
     let html = '<ul class="timeline">';
     let day = '';
-    list.forEach((r, i) => {
+    list.forEach((r) => {
       const key = M.fmtDay(r.start);
       if (key !== day) {
         day = key;
@@ -81,7 +81,7 @@
           <span class="body1Strong">${esc(r.activity || '(未填写活动内容)')}</span>
           ${presenceHtml(tone, text)}
           <span class="caption1 num">${esc(M.fmtTime(r.start))} → ${r.end ? esc(M.fmtTime(r.end)) : '进行中'}</span>
-          <span class="caption1 num" data-dur="${i}">· ${esc(M.fmtDuration(M.duration(r, now)))}</span>
+          <span class="caption1 num" data-dur="${esc(r.id)}">· ${esc(M.fmtDuration(M.duration(r, now)))}</span>
         </div>
         ${r.note ? `<div class="timeline__note">${esc(r.note)}</div>` : ''}
       </li>`;
@@ -113,6 +113,51 @@
       if (!el.querySelector('[data-me-state]')) return;
       el.className = `presence presence--${tone}${el.classList.contains('presence--large') ? ' presence--large' : ''}`;
     });
+  }
+
+  /* ---------------- 记录筛选 / 翻页（观看页与编辑页共用） ---------------- */
+  const PAGE_SIZE = 10;
+
+  /* 关键词按空格拆分，全部命中才保留；匹配活动内容、备注、类型与起止时间 */
+  function filterRecords(records, query) {
+    const list = [...(records || [])].sort(M.byStartDesc);
+    const terms = String(query || '')
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
+    if (!terms.length) return list;
+    return list.filter((r) => {
+      const hay = `${r.activity} ${r.note} ${M.kindOf(r.kind).label} ${M.fmtDateTime(r.start)} ${M.fmtDateTime(r.end)}`.toLowerCase();
+      return terms.every((t) => hay.includes(t));
+    });
+  }
+
+  function paginate(list, page = 1, size = PAGE_SIZE) {
+    const pages = Math.max(1, Math.ceil(list.length / size));
+    const current = Math.min(Math.max(1, page), pages);
+    return { page: current, pages, size, total: list.length, items: list.slice((current - 1) * size, current * size) };
+  }
+
+  function pagerHtml(page, pages, total, size = PAGE_SIZE) {
+    const from = total ? (page - 1) * size + 1 : 0;
+    const to = Math.min(total, page * size);
+    const win = 5;
+    let start = Math.max(1, page - 2);
+    const end = Math.min(pages, start + win - 1);
+    start = Math.max(1, end - win + 1);
+    const nums = [];
+    for (let i = start; i <= end; i++) nums.push(i);
+    const btn = (p, label, state = '') =>
+      `<button class="pagebtn" type="button" data-page="${p}"${state === 'current' ? ' aria-current="page"' : ''}${state === 'disabled' ? ' disabled' : ''}>${label}</button>`;
+    return `<span class="caption1">第 ${from}–${to} 条，共 ${total} 条${pages > 1 ? ` · 第 ${page} / ${pages} 页` : ''}</span>
+      <div class="pager__pages">
+        ${btn(page - 1, icon('chevron-left', 16), page <= 1 ? 'disabled' : '')}
+        ${start > 1 ? btn(1, 1) + (start > 2 ? '<span class="pager__ellipsis">…</span>' : '') : ''}
+        ${nums.map((p) => btn(p, p, p === page ? 'current' : '')).join('')}
+        ${end < pages ? (end < pages - 1 ? '<span class="pager__ellipsis">…</span>' : '') + btn(pages, pages) : ''}
+        ${btn(page + 1, icon('chevron-right', 16), page >= pages ? 'disabled' : '')}
+      </div>`;
   }
 
   function render(root, data, now) {
@@ -184,6 +229,7 @@
   global.MonitoringUI = {
     esc, icon, initials, presenceOf, presenceHtml,
     heroHtml, timelineHtml, metricsHtml, applyIdentity, render,
+    filterRecords, paginate, pagerHtml, PAGE_SIZE,
     toast, initTheme, prefetchLinks, mountFooter
   };
 })(window);

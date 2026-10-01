@@ -1,22 +1,23 @@
 name: Monitoring
 
-纯静态（HTML/CSS/JS，零依赖、零构建）的「个人状态看板」：
-记录当前在做什么、起止时间与备注，按时间线留档，并部署到 GitHub Pages 供他人观看。
+纯静态（HTML/CSS/JS，零依赖、零构建）的「个人状态看板」：记录当前在做什么、起止时间与备注，按时间线留档。展示页部署到 GitHub Pages 给他人观看，编辑页只在本地使用。
 
-## 两个页面
+## 两个页面（职责彻底分开）
 
-| 页面 | 用途 |
-|---|---|
-| `index.html` | 观看页：当前状态大卡片、计时、今日/本周统计、按天分组的时间线。只读，给他人看。 |
-| `edit.html` | 编辑页：QQ 空间式发表框（活动内容 + 工具条 + 字数 + 发表按钮）、实时「他人视角」预览、记录管理表格、GitHub 发布。 |
+| 页面 | 谁用 | 内容 | 是否部署 |
+|---|---|---|---|
+| `index.html` | 所有人 | **只读**：当前状态 + 计时、今日/本周统计、记录时间线（**搜索 + 翻页**）。无导航栏、无编辑入口 | ✅ 部署到 Pages |
+| `edit.html` | 只有你（本地） | 左栏 + 命令栏；QQ 空间式发表框；实时「他人视角」预览；记录管理表格（**搜索 + 翻页**）；发布到 GitHub | ❌ 不部署 |
 
-界面遵循 Fluent 2（Microsoft 设计语言）：只使用官方 token（`assets/tokens.min.css`），支持浅色/深色，键盘可达。
+手机上两个页面都**没有旁栏**：展示页本来就没有；编辑页在 ≤900px 时把导航收进顶栏。
+
+界面遵循 Fluent 2（Microsoft 设计语言）：只用官方 token（`assets/tokens.min.css`），浅深色、键盘可达。
 
 ## 数据
 
-- `data/status.json` —— 唯一数据源（提交进仓库，观看页直接读取，所以所有人都能看到）。
+- `data/status.json` —— 唯一数据源，提交进仓库，展示页直接读取。
 - 记录字段：`activity`（活动内容）、`start`（起始时间）、`end`（终止时间，空 = 进行中）、`note`（备注）、`kind`（活动类型）。
-- 编辑页的改动先写入浏览器 `localStorage`（立即生效、离线可用），再通过「发布到 GitHub」提交到仓库：
+- 编辑页改动先写入浏览器 `localStorage`（立即生效、离线可用），再点「发布到 GitHub」提交到仓库：
 
 ```json
 { "version": 1, "owner": { "name": "…", "bio": "…" }, "updatedAt": "…",
@@ -28,12 +29,10 @@ name: Monitoring
 ## 本地预览
 
 ```bash
-python3 -m http.server 8080      # 或 npx serve .
-# 观看页 http://localhost:8080/index.html
-# 编辑页 http://localhost:8080/edit.html
+python3 -m http.server 8080
+# 展示页（线上同款）http://localhost:8080/index.html
+# 编辑页（仅本地）   http://localhost:8080/edit.html
 ```
-
-直接双击 `index.html`（`file://`）也能看，但浏览器会拦截读取 `data/status.json`，此时显示空数据；编辑功能不受影响。
 
 ## 发布到 GitHub（一键）
 
@@ -41,30 +40,31 @@ python3 -m http.server 8080      # 或 npx serve .
 ./deploy.sh [仓库名] [public|private]   # 需要已登录的 gh CLI
 ```
 
-脚本会 init/commit/push；首次运行自动创建仓库并把 Pages 来源切到 GitHub Actions。
-手动流程等价于：
+`.github/workflows/pages.yml` 用**白名单**构建 `_site/`，只会发布：
 
-```bash
-git remote add origin git@github.com:<you>/Monitoring.git
-git push -u origin main
-# 仓库 Settings → Pages → Source 选 “GitHub Actions”
+```
+index.html
+assets/{app.css,tokens.min.css,store.js,ui.js,view.js}
+data/status.json
+.nojekyll
 ```
 
-之后每次提交 `data/status.json`（或点击编辑页的「发布到 GitHub」）都会触发 `.github/workflows/pages.yml` 重新部署，地址：`https://<you>.github.io/Monitoring/`。
+`edit.html` / `assets/edit.js` / 测试 / 脚本一律不进 `_site`，线上站点上不存在编辑功能。之后每次提交 `data/status.json`（或点编辑页的「发布到 GitHub」）都会触发重新部署，地址 `https://<you>.github.io/Monitoring/`。
 
 ## 在浏览器里直接发布（无需命令行）
 
-1. 打开 `edit.html` → 「同步设置…」
-2. 填入 `owner` / `repo` / `branch` / `path(data/status.json)` 与细粒度 Token（权限只需 **Contents: Read and write**）
-3. 点「发布到 GitHub」：脚本会先拉取远程数据按 id 合并（`updatedAt` 新的优先），再提交，避免覆盖别人的改动
+1. 本地打开 `edit.html` → 「同步设置」
+2. 填 `owner` / `repo` / `branch` / `path(data/status.json)` 与细粒度 Token（权限只需 **Contents: Read and write**）
+3. 点「发布到 GitHub」：先拉取远程按 id 合并（`updatedAt` 新的优先），再提交，不会覆盖别人的改动
 
-Token 仅保存在本机 `localStorage`，不会写入仓库。公共电脑上用完请点「清除配置」。
+Token 只存在本机 `localStorage`，不写入仓库；公共电脑上用完请点「清除配置」。
 
 ## 其他
 
-- 「导出 JSON」得到的文件可直接覆盖 `data/status.json` 后提交；「导入 JSON」按 id 合并。
-- 观看页每 5 分钟静默刷新一次数据，无需手动刷新。
-- 无第三方依赖、无 CDN、无构建步骤；页面总体积 < 40KB。
+- 搜索：空格分词、全部命中；匹配活动内容、备注、类型与起止时间。翻页默认每页 10 条（展示页）/ 8 条（管理表）。
+- 「导出 JSON」可直接覆盖 `data/status.json` 后提交；「导入 JSON」按 id 合并。
+- 展示页每 5 分钟静默刷新数据；无第三方依赖、无 CDN、无构建步骤。
+- 页面切换用跨文档视图过渡（Chrome/Edge 126+），数据在 `<head>` 提前预取，导航栏不参与过渡。
 
 ## 测试
 

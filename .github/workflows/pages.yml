@@ -1,5 +1,8 @@
 name: Deploy to GitHub Pages
 
+# 只发布「只读展示页 + 记录列表（含搜索/翻页）」：
+#   index.html · assets/{app.css,tokens.min.css,store.js,ui.js,view.js} · data/status.json
+# 编辑页 edit.html / edit.js、测试与脚本一律不进 _site，因此不会出现在线上站点。
 on:
   push:
     branches: [main]
@@ -23,12 +26,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Build public site (allowlist)
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site/assets _site/data
+          cp index.html _site/
+          cp .nojekyll _site/
+          cp assets/app.css assets/tokens.min.css _site/assets/
+          cp assets/store.js assets/ui.js assets/view.js _site/assets/
+          cp data/status.json _site/data/
+          echo "--- 将发布以下文件 ---"
+          find _site -type f | sort
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
