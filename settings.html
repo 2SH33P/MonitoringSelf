@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monitoring · 设置</title>
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem("monitoring:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
+window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():null}).catch(function(){return null});</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
+<link rel="stylesheet" href="assets/tokens.min.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<!-- 本地管理页之三：设置（GitHub 同步 / 自动同步 / 身份 / 数据）。不部署到 GitHub Pages。 -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 20 20"><path d="M3.5 9.2 10 3.6l6.5 5.6V16a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8 17v-4.2h4V17"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 20 20"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5.8V10l3 1.8"/></symbol>
+  <symbol id="i-options" viewBox="0 0 20 20"><path d="M3.4 6.6h2.3M9.5 6.6h7.1M3.4 13.4h7.1M14.3 13.4h2.3"/><circle cx="7.6" cy="6.6" r="1.9"/><circle cx="12.4" cy="13.4" r="1.9"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 20 20"><path d="M15.8 8A6 6 0 0 0 4.9 6.6M4.2 12A6 6 0 0 0 15.1 13.4"/><path d="M15.8 4.4V8h-3.6M4.2 15.6V12h3.6"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 20 20"><path d="M10 12.8V3.4M6.4 7 10 3.4 13.6 7"/><path d="M4 12.4v3.4a1.2 1.2 0 0 0 1.2 1.2h9.6a1.2 1.2 0 0 0 1.2-1.2v-3.4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 20 20"><path d="M10 3.4v9.4M6.4 9.2 10 12.8l3.6-3.6"/><path d="M4 12.4v3.4a1.2 1.2 0 0 0 1.2 1.2h9.6a1.2 1.2 0 0 0 1.2-1.2v-3.4"/></symbol>
+  <symbol id="i-delete" viewBox="0 0 20 20"><path d="M4.2 6.2h11.6"/><path d="M8 6.2V4.6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.6"/><path d="M6.4 6.2l.6 9.4a1.1 1.1 0 0 0 1.1 1h3.8a1.1 1.1 0 0 0 1.1-1l.6-9.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.8 10.2l2.2 2.2 4.2-4.6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6.4v4.4M10 13.4h.01"/></symbol>
+  <symbol id="i-person" viewBox="0 0 20 20"><circle cx="10" cy="7.2" r="3.2"/><path d="M4 16.6c.6-3.2 3-4.6 6-4.6s5.4 1.4 6 4.6"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 20 20"><path d="M16.6 12.1A7 7 0 0 1 7.9 3.4a7 7 0 1 0 8.7 8.7z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.6v1.6M10 15.8v1.6M17.4 10h-1.6M4.2 10H2.6M15.2 4.8l-1.1 1.1M5.9 14.1l-1.1 1.1M15.2 15.2l-1.1-1.1M5.9 5.9 4.8 4.8"/></symbol>
+</svg>
+
+<div class="layout">
+  <nav class="rail" aria-label="主导航">
+    <div class="rail__brand">
+      <span class="rail__logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>Monitoring</span>
+    </div>
+    <p class="caption2 rail__label">工作区</p>
+    <a class="navitem" href="index.html">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+      <span>总览</span>
+    </a>
+    <a class="navitem" href="edit.html">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+      <span>编辑状态</span>
+    </a>
+    <a class="navitem" href="records.html">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
+      <span>全部记录</span>
+    </a>
+    <a class="navitem" href="settings.html" aria-current="page">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-options"></use></svg>
+      <span>设置</span>
+    </a>
+    <div class="rail__spacer"></div>
+    <div class="rail__me">
+      <span class="avatar" data-avatar aria-hidden="true">M</span>
+      <div class="stack-xs">
+        <span class="body1Strong" data-me-name>Monitoring</span>
+        <span class="presence presence--offline"><span class="presence__dot"></span><span data-me-state>加载中</span></span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="commandbar">
+      <span class="commandbar__title">设置</span>
+      <nav class="commandbar__nav" aria-label="页面导航">
+        <a class="btn btn--subtle btn--icon" href="index.html" aria-label="总览" title="总览">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+        </a>
+        <a class="btn btn--subtle btn--icon" href="edit.html" aria-label="编辑状态" title="编辑状态">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+        </a>
+        <a class="btn btn--subtle btn--icon" href="records.html" aria-label="全部记录" title="全部记录">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
+        </a>
+        <a class="btn btn--subtle btn--icon" href="settings.html" aria-current="page" aria-label="设置" title="设置">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-options"></use></svg>
+        </a>
+      </nav>
+      <span class="commandbar__spacer"></span>
+      <a class="navitem navitem--bar" href="index.html">
+        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+        <span>查看总览</span>
+      </a>
+      <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题"></button>
+    </header>
+
+    <main class="content">
+      <div class="stack">
+        <div class="grid-2">
+          <!-- GitHub 同步 -->
+          <section class="card card--flush">
+            <div class="card__head">
+              <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sync"></use></svg>
+              <span class="card__title">GitHub 同步</span>
+            </div>
+            <div class="card__body stack-s">
+              <div class="row" id="sync-state"></div>
+              <p class="caption1">提交的是仓库里的 <span class="mono">data/status.json</span>；Pages 用白名单构建，只会发布只读展示页与这份数据。Token 只存在本机 localStorage，不写入仓库。</p>
+              <div class="field">
+                <label class="field__label" for="cfg-owner">仓库所有者（用户名或组织）</label>
+                <input class="input" id="cfg-owner" placeholder="octocat" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cfg-repo">仓库名</label>
+                <input class="input" id="cfg-repo" placeholder="Monitoring" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cfg-branch">分支</label>
+                <input class="input" id="cfg-branch" placeholder="main" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cfg-path">数据文件路径</label>
+                <input class="input" id="cfg-path" placeholder="data/status.json" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cfg-token">个人访问令牌（PAT，权限只需 Contents: Read and write）</label>
+                <input class="input" id="cfg-token" type="password" placeholder="github_pat_..." autocomplete="off">
+              </div>
+              <label class="check" for="cfg-auto">
+                <input type="checkbox" id="cfg-auto">
+                自动同步：每次开始 / 结束 / 修改记录后自动提交
+              </label>
+              <div class="actions-row">
+                <button class="btn btn--primary" id="cfg-save" type="button">保存设置</button>
+                <button class="btn btn--secondary" id="cfg-push" type="button">
+                  <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+                  <span>立即发布</span>
+                </button>
+                <button class="btn btn--subtle" id="cfg-pull" type="button">
+                  <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+                  <span>从 GitHub 拉取</span>
+                </button>
+                <button class="btn btn--danger" id="cfg-clear" type="button">清除配置</button>
+              </div>
+            </div>
+          </section>
+
+          <div class="stack">
+            <!-- 身份信息 -->
+            <section class="card card--flush">
+              <div class="card__head">
+                <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-person"></use></svg>
+                <span class="card__title">身份信息</span>
+              </div>
+              <div class="card__body stack-s">
+                <div class="field">
+                  <label class="field__label" for="owner-name">名称</label>
+                  <input class="input" id="owner-name" maxlength="40" placeholder="例如：张三">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="owner-bio">一句话简介</label>
+                  <input class="input" id="owner-bio" maxlength="200" placeholder="例如：在读研究生 / 后端工程师">
+                </div>
+                <div class="actions-row">
+                  <button class="btn btn--secondary" id="owner-save" type="button">保存身份信息</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 数据 -->
+            <section class="card card--flush">
+              <div class="card__head">
+                <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+                <span class="card__title">数据</span>
+                <span class="grow"></span>
+                <span class="caption1" id="data-hint"></span>
+              </div>
+              <div class="card__body stack-s">
+                <div class="actions-row">
+                  <button class="btn btn--secondary" id="export-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+                    <span>导出 JSON</span>
+                  </button>
+                  <button class="btn btn--secondary" id="import-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+                    <span>导入 JSON</span>
+                  </button>
+                  <input class="hide" type="file" id="import-file" accept="application/json">
+                  <button class="btn btn--subtle" id="save-local" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+                    <span>保存到本地</span>
+                  </button>
+                  <button class="btn btn--danger" id="clear-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-delete"></use></svg>
+                    <span>清空全部记录</span>
+                  </button>
+                </div>
+                <p class="caption1">导出得到的文件可直接覆盖 <span class="mono">data/status.json</span> 后提交；导入按 id 合并（updatedAt 新的优先）。</p>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <p class="caption1" id="page-footer"></p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/store.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/settings.js"></script>
+</body>
+</html>

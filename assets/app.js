@@ -1,0 +1,162 @@
+/* 本地管理页共享层：数据加载、当前状态卡、提交（含自动同步）、GitHub 推送/拉取。
+   edit.html / records.html / settings.html 都引它，避免三份重复逻辑。 */
+(function (global) {
+  'use strict';
+  const M = global.Monitoring;
+  const UI = global.MonitoringUI;
+  let autoTimer = 0;
+
+  const App = {
+    data: null,
+
+    async mount() {
+      UI.initTheme();
+      UI.prefetchLinks();
+      App.data = await M.load();
+      UI.applyIdentity(App.data, Date.now());
+      setInterval(() => UI.applyIdentity(App.data, Date.now()), 30000);
+      return App.data;
+    },
+
+    /* 当前状态卡（管理页共用）：进行中 → 结束 / 修改；空闲 → 开始新状态 */
+    nowHtml(now = Date.now(), startMode = 'focus') {
+      const cur = M.currentState(App.data, now);
+      const rec = cur.record;
+
+      if (!rec || cur.state !== 'running') {
+        const startBtn =
+          startMode === 'link'
+            ? `<a class="btn btn--primary" href="edit.html">${UI.icon('edit', 20)}开始新状态</a>`
+            : `<button class="btn btn--primary" type="button" data-act="focus-composer">${UI.icon('edit', 20)}开始新状态</button>`;
+        return `<div class="stack">
+          <div class="row row--between">
+            ${UI.presenceHtml(cur.state === 'planned' ? 'away' : 'offline', cur.state === 'planned' ? '计划中' : '当前空闲', true)}
+            ${rec ? `<span class="caption1">最近 ${UI.esc(M.fmtRelative(rec.end || rec.start, now))}</span>` : ''}
+          </div>
+          ${
+            rec
+              ? `<p class="body1 muted">最近一条：<span class="body1Strong">${UI.esc(rec.activity)}</span> · ${UI.esc(
+                  M.fmtDuration(M.duration(rec, now))
+                )}（${UI.esc(M.fmtDateTime(rec.start))} → ${rec.end ? UI.esc(M.fmtDateTime(rec.end)) : '进行中'}）</p>`
+              : '<p class="body1 muted">还没有任何记录。写下要开始做的事，点「开始」。</p>'
+          }
+          <div class="actions-row">${startBtn}</div>
+        </div>`;
+      }
+
+      const kind = M.kindOf(rec.kind);
+      return `<div class="stack">
+        <div class="row row--between">
+          ${UI.presenceHtml(kind.tone, kind.label, true)}
+          <span class="caption1">起始 ${UI.esc(M.fmtDateTime(rec.start))}</span>
+        </div>
+        <p class="hero__activity">${UI.esc(rec.activity || '(未填写活动内容)')}</p>
+        <div class="row">
+          <span class="hero__timer" data-now-timer>${UI.esc(M.fmtDuration(M.duration(rec, now)))}</span>
+          <span class="caption1">已持续</span>
+        </div>
+        ${rec.note ? `<div class="note-box">${UI.esc(rec.note)}</div>` : ''}
+        <div class="actions-row">
+          <button class="btn btn--primary" type="button" data-act="stop" data-id="${rec.id}">${UI.icon('stop', 20)}结束当前状态</button>
+          <button class="btn btn--secondary" type="button" data-act="edit" data-id="${rec.id}">${UI.icon('edit', 20)}修改这条</button>
+        </div>
+      </div>`;
+    },
+
+    /* 结束某条（默认结束正在进行的）：写本地 + 触发自动同步 */
+    stop(id) {
+      const cur = M.currentState(App.data);
+      const rec = App.data.records.find((r) => r.id === id) || (cur.state === 'running' ? cur.record : null);
+      if (!rec) return false;
+      const span = M.fmtDuration(M.duration(rec));
+      App.commit(M.stopRecord(App.data, rec.id), `已结束「${rec.activity}」，本次 ${span}`);
+      return true;
+    },
+
+    tick() {
+      const cur = M.currentState(App.data);
+      const node = document.querySelector('[data-now-timer]');
+      if (node && cur.state === 'running' && cur.record) node.textContent = M.fmtDuration(M.duration(cur.record));
+    },
+
+    /* 任何状态变更的唯一出口：落 localStorage → 提示 → 触发自动同步 */
+    commit(next, message) {
+      App.data = M.saveLocal(next);
+      UI.toast(message);
+      App.autoPush('chore(status): ' + message);
+      return App.data;
+    },
+
+    autoPush(message) {
+      const cfg = M.syncConfig();
+      if (!cfg || !cfg.auto) return;
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(() => App.push(message, true), 1200);
+    },
+
+    async push(message, silent) {
+      if (!M.syncConfig()) {
+        if (!silent) {
+          UI.toast('还没有配置 GitHub，正在打开设置页…', 'error');
+          setTimeout(() => (location.href = 'settings.html'), 900);
+        }
+        return null;
+      }
+      try {
+        const merged = await M.push(
+          App.data,
+          message || `chore(status): 更新状态记录 (${new Date().toISOString().slice(0, 16)})`
+        );
+        App.data = M.saveLocal(merged);
+        UI.toast(silent ? '已自动同步到 GitHub' : '已提交到 GitHub，Pages 约 1 分钟后更新', 'ok', silent ? 2200 : 5000);
+        return App.data;
+      } catch (e) {
+        UI.toast('同步失败：' + (e.message || e), 'error', 6000);
+        return null;
+      }
+    },
+
+    async pull() {
+      if (!M.syncConfig()) {
+        UI.toast('还没有配置 GitHub，正在打开设置页…', 'error');
+        setTimeout(() => (location.href = 'settings.html'), 900);
+        return null;
+      }
+      try {
+        const { data: remote } = await M.pull();
+        if (!remote) {
+          UI.toast('远程还没有 data/status.json', 'error');
+          return null;
+        }
+        App.data = M.saveLocal(M.merge(App.data, remote));
+        UI.toast('已合并远程数据');
+        return App.data;
+      } catch (e) {
+        UI.toast('拉取失败：' + (e.message || e), 'error', 6000);
+        return null;
+      }
+    },
+
+    syncFlag() {
+      const cfg = M.syncConfig();
+      return cfg ? (cfg.auto ? '自动同步已开启' : '自动同步关闭') : '未配置同步';
+    },
+
+    syncStateHtml() {
+      const cfg = M.syncConfig();
+      const local = M.loadLocal();
+      return (
+        UI.presenceHtml(
+          cfg ? 'available' : 'offline',
+          cfg ? (cfg.auto ? 'GitHub 已配置 · 自动同步开' : 'GitHub 已配置 · 自动同步关') : '仅本地'
+        ) +
+        (cfg
+          ? `<span class="caption1 mono">${UI.esc(cfg.owner)}/${UI.esc(cfg.repo)}@${UI.esc(cfg.branch)} · ${UI.esc(cfg.path)}</span>`
+          : '<span class="caption1">数据只保存在本机浏览器，不会上传</span>') +
+        (local ? `<span class="caption1">· 最后保存 ${UI.esc(M.fmtRelative(local.updatedAt))}</span>` : '')
+      );
+    }
+  };
+
+  global.MonitoringApp = App;
+})(window);

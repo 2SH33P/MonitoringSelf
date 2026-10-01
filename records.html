@@ -3,31 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Monitoring · 编辑状态</title>
+<title>Monitoring · 全部记录</title>
 <meta name="color-scheme" content="light dark">
 <script>try{var t=localStorage.getItem("monitoring:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
 window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():null}).catch(function(){return null});</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
-<link rel="prefetch" href="records.html">
 <link rel="stylesheet" href="assets/tokens.min.css">
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<!-- 本地管理页之一：编辑状态（开始 / 结束）。不部署到 GitHub Pages。 -->
+<!-- 本地管理页之二：全部记录（搜索 / 翻页 / 结束 / 编辑 / 删除）。不部署到 GitHub Pages。 -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 20 20"><path d="M3.5 9.2 10 3.6l6.5 5.6V16a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8 17v-4.2h4V17"/></symbol>
   <symbol id="i-edit" viewBox="0 0 20 20"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></symbol>
   <symbol id="i-clock" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5.8V10l3 1.8"/></symbol>
-  <symbol id="i-tag" viewBox="0 0 20 20"><path d="M3.2 10.9V4.4a1.2 1.2 0 0 1 1.2-1.2h6.5a1.2 1.2 0 0 1 .85.35l5.1 5.1a1.2 1.2 0 0 1 0 1.7l-6.25 6.25a1.2 1.2 0 0 1-1.7 0l-5.1-5.1a1.2 1.2 0 0 1-.35-.85z"/><circle cx="6.6" cy="6.6" r="1.1"/></symbol>
-  <symbol id="i-note" viewBox="0 0 20 20"><path d="M5.2 3h9.6a1.2 1.2 0 0 1 1.2 1.2v11.6a1.2 1.2 0 0 1-1.2 1.2H5.2A1.2 1.2 0 0 1 4 15.8V4.2A1.2 1.2 0 0 1 5.2 3z"/><path d="M7 7h6M7 10h6M7 13h3.5"/></symbol>
   <symbol id="i-pulse" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.4 10h1.8l1.2-2.6 1.6 5 1.2-2.4h1.4"/></symbol>
+  <symbol id="i-options" viewBox="0 0 20 20"><path d="M3.4 6.6h2.3M9.5 6.6h7.1M3.4 13.4h7.1M14.3 13.4h2.3"/><circle cx="7.6" cy="6.6" r="1.9"/><circle cx="12.4" cy="13.4" r="1.9"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 20 20"><rect x="5.4" y="5.4" width="9.2" height="9.2" rx="1.6"/></symbol>
+  <symbol id="i-delete" viewBox="0 0 20 20"><path d="M4.2 6.2h11.6"/><path d="M8 6.2V4.6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.6"/><path d="M6.4 6.2l.6 9.4a1.1 1.1 0 0 0 1.1 1h3.8a1.1 1.1 0 0 0 1.1-1l.6-9.4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 20 20"><circle cx="8.8" cy="8.8" r="5.2"/><path d="M12.6 12.6 17 17"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 20 20"><path d="M12 5.6 7.6 10 12 14.4"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 20 20"><path d="M8 5.6 12.4 10 8 14.4"/></symbol>
   <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.8 10.2l2.2 2.2 4.2-4.6"/></symbol>
   <symbol id="i-error" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6.4v4.4M10 13.4h.01"/></symbol>
   <symbol id="i-moon" viewBox="0 0 20 20"><path d="M16.6 12.1A7 7 0 0 1 7.9 3.4a7 7 0 1 0 8.7 8.7z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.6v1.6M10 15.8v1.6M17.4 10h-1.6M4.2 10H2.6M15.2 4.8l-1.1 1.1M5.9 14.1l-1.1 1.1M15.2 15.2l-1.1-1.1M5.9 5.9 4.8 4.8"/></symbol>
-  <symbol id="i-stop" viewBox="0 0 20 20"><rect x="5.4" y="5.4" width="9.2" height="9.2" rx="1.6"/></symbol>
-  <symbol id="i-chevron" viewBox="0 0 20 20"><path d="M5.6 8l4.4 4.4L14.4 8"/></symbol>
-  <symbol id="i-options" viewBox="0 0 20 20"><path d="M3.4 6.6h2.3M9.5 6.6h7.1M3.4 13.4h7.1M14.3 13.4h2.3"/><circle cx="7.6" cy="6.6" r="1.9"/><circle cx="12.4" cy="13.4" r="1.9"/></symbol>
 </svg>
 
 <div class="layout">
@@ -41,11 +41,11 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
       <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
       <span>总览</span>
     </a>
-    <a class="navitem" href="edit.html" aria-current="page">
+    <a class="navitem" href="edit.html">
       <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
       <span>编辑状态</span>
     </a>
-    <a class="navitem" href="records.html">
+    <a class="navitem" href="records.html" aria-current="page">
       <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
       <span>全部记录</span>
     </a>
@@ -65,15 +65,15 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
 
   <div class="main">
     <header class="commandbar">
-      <span class="commandbar__title">编辑状态</span>
+      <span class="commandbar__title">全部记录</span>
       <nav class="commandbar__nav" aria-label="页面导航">
         <a class="btn btn--subtle btn--icon" href="index.html" aria-label="总览" title="总览">
           <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
         </a>
-        <a class="btn btn--subtle btn--icon" href="edit.html" aria-current="page" aria-label="编辑状态" title="编辑状态">
+        <a class="btn btn--subtle btn--icon" href="edit.html" aria-label="编辑状态" title="编辑状态">
           <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
         </a>
-        <a class="btn btn--subtle btn--icon" href="records.html" aria-label="全部记录" title="全部记录">
+        <a class="btn btn--subtle btn--icon" href="records.html" aria-current="page" aria-label="全部记录" title="全部记录">
           <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
         </a>
         <a class="btn btn--subtle btn--icon" href="settings.html" aria-label="设置" title="设置">
@@ -81,94 +81,48 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
         </a>
       </nav>
       <span class="commandbar__spacer"></span>
-      <a class="navitem navitem--bar" href="records.html">
-        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
-        <span>全部记录</span>
+      <a class="navitem navitem--bar" href="edit.html">
+        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+        <span>开始新状态</span>
       </a>
       <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题"></button>
     </header>
 
     <main class="content">
       <div class="stack">
-        <!-- 当前状态控制台：开始 / 结束的唯一主操作区 -->
         <section class="card card--flush" aria-live="polite">
           <div class="card__head">
             <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pulse"></use></svg>
             <span class="card__title">当前状态</span>
             <span class="grow"></span>
-            <span class="caption1" id="sync-flag"></span>
           </div>
           <div class="card__body" id="now-body"></div>
         </section>
 
-        <!-- 开始 / 补记 / 修改 -->
-        <section class="composer" aria-label="状态编辑器">
-          <div class="composer__tabs" role="tablist">
-            <button class="composer__tab" role="tab" aria-selected="true" id="composer-tab">开始新状态</button>
-            <span class="composer__tab composer__tab--muted">点「开始」会自动结束上一条</span>
+        <section class="card card--flush">
+          <div class="card__head">
+            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
+            <span class="card__title">全部记录</span>
+            <span class="grow"></span>
+            <span class="caption1" id="count-hint"></span>
           </div>
-
-          <div class="composer__body">
-            <div class="now-hint" id="running-hint" hidden></div>
-            <label class="hide" for="activity">活动内容</label>
-            <textarea class="composer__editable" id="activity" maxlength="60"
-              placeholder="此刻要开始做什么？（最多 60 字）"></textarea>
-
-            <div class="composer__toolbar">
-              <button class="tool" type="button" data-toggle="time" aria-expanded="true">
-                <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
-                时间
-              </button>
-              <button class="tool" type="button" data-toggle="kind" aria-expanded="true">
-                <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-tag"></use></svg>
-                类型
-              </button>
-              <button class="tool" type="button" data-toggle="note" aria-expanded="false">
-                <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-note"></use></svg>
-                备注
-              </button>
-              <span class="grow"></span>
-              <span class="caption1" id="editing-hint"></span>
-            </div>
-
-            <div class="composer__panel" id="panel-time">
-              <div class="field">
-                <label class="field__label" for="start">起始时间</label>
-                <input class="input" type="datetime-local" id="start">
-              </div>
-              <div class="field">
-                <label class="field__label" for="end">终止时间</label>
-                <input class="input" type="datetime-local" id="end">
-                <label class="check" for="ongoing"><input type="checkbox" id="ongoing"> 至今（进行中）</label>
-              </div>
-            </div>
-
-            <div class="composer__panel" id="panel-kind">
-              <div class="field">
-                <label class="field__label" for="kind">活动类型</label>
-                <span class="select-wrap">
-                  <select class="select" id="kind"></select>
-                  <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-chevron"></use></svg>
-                </span>
-              </div>
-            </div>
-
-            <div class="composer__panel" id="panel-note" hidden>
-              <div class="field">
-                <label class="field__label" for="note">备注</label>
-                <textarea class="textarea" id="note" maxlength="1000" placeholder="补充说明，会显示在记录里"></textarea>
-              </div>
-            </div>
+          <div class="list-toolbar list-toolbar--card">
+            <label class="search" for="records-q">
+              <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+              <input id="records-q" type="search" placeholder="搜索活动内容、备注、类型或日期" autocomplete="off">
+            </label>
+            <span class="caption1" id="records-hint"></span>
           </div>
-
-          <div class="composer__footer">
-            <span class="counter" id="counter">还可以输入 60 字</span>
-            <div class="row">
-              <button class="btn btn--subtle hide" id="cancel-edit" type="button">取消修改</button>
-              <button class="btn btn--subtle" id="reset-btn" type="button">清空</button>
-              <button class="btn btn--secondary" id="submit-btn" type="button">开始</button>
-            </div>
+          <div class="table-scroll">
+            <table class="table">
+              <thead>
+                <tr><th>活动内容</th><th>状态</th><th>起止时间</th><th>时长</th><th>操作</th></tr>
+              </thead>
+              <tbody id="records"></tbody>
+            </table>
           </div>
+          <div id="records-empty"></div>
+          <div class="pager pager--card" id="records-pager"></div>
         </section>
 
         <p class="caption1" id="page-footer"></p>
@@ -180,6 +134,6 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
 <script src="assets/store.js"></script>
 <script src="assets/ui.js"></script>
 <script src="assets/app.js"></script>
-<script src="assets/edit.js"></script>
+<script src="assets/records.js"></script>
 </body>
 </html>
