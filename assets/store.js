@@ -315,7 +315,11 @@
 
   function saveAgentConfig(cfg) {
     if (!cfg || !cfg.url) localStorage.removeItem('monitoring:agent:v1');
-    else localStorage.setItem('monitoring:agent:v1', JSON.stringify({ url: String(cfg.url).replace(/\/+$/, ''), key: cfg.key || '' }));
+    else
+      localStorage.setItem(
+        'monitoring:agent:v1',
+        JSON.stringify({ url: String(cfg.url).replace(/\/+$/, ''), key: cfg.key || '', auto: cfg.auto !== false })
+      );
   }
 
   async function agentRequest(pathname, options = {}, timeoutMs = 15000) {

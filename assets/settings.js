@@ -20,7 +20,8 @@
 
   function renderAgent(st) {
     const cfg = M.agentConfig();
-    $('#agent-flag').textContent = cfg ? '已启用 · ' + App.transportName() : '未启用';
+    $('#agent-flag').textContent = cfg ? '已启用 · ' + App.transportName() + (cfg.auto === false ? '（自动推送关）' : '') : '未启用';
+    $('#agent-auto').checked = !cfg || cfg.auto !== false;
     if (!st || !st.present) {
       $('#agent-state').innerHTML =
         UI.presenceHtml('offline', '没探测到代理') +
@@ -97,7 +98,7 @@
       const { st, url, key } = await probeAgent();
       if (!st.present) return UI.toast('这个地址上没有代理响应', 'error');
       if (!st.authorized) return UI.toast('密钥不对，看代理启动日志里的那一串', 'error');
-      M.saveAgentConfig({ url, key });
+      M.saveAgentConfig({ url, key, auto: $('#agent-auto').checked });
       renderState();
       UI.toast('本机代理已启用，之后的开始/结束/修改都由机器推送');
     });
@@ -124,6 +125,13 @@
         }
       })
     );
+
+    $('#agent-auto').addEventListener('change', (e) => {
+      const cfg = M.agentConfig();
+      if (!cfg) return;
+      M.saveAgentConfig({ ...cfg, auto: e.target.checked });
+      UI.toast(e.target.checked ? '自动推送已开启' : '自动推送已关闭（仍可手动「立即推送」）');
+    });
 
     $('#agent-off').addEventListener('click', () => {
       M.saveAgentConfig(null);

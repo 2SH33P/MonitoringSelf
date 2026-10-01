@@ -109,6 +109,10 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
                 <label class="field__label" for="agent-key">管理密钥</label>
                 <input class="input" id="agent-key" type="password" placeholder="代理启动时打印的那串" autocomplete="off">
               </div>
+              <label class="check" for="agent-auto">
+                <input type="checkbox" id="agent-auto">
+                自动推送：每次开始 / 结束 / 修改后自动提交
+              </label>
               <div class="actions-row">
                 <button class="btn btn--primary" id="agent-save" type="button">保存并测试连接</button>
                 <button class="btn btn--secondary" id="agent-push" type="button">

@@ -90,7 +90,11 @@
     autoPush(message) {
       const cfg = M.syncConfig();
       const agent = M.agentConfig();
-      if (!agent && (!cfg || !cfg.auto)) return;
+      if (agent) {
+        if (agent.auto === false) return;
+      } else if (!cfg || !cfg.auto) {
+        return;
+      }
       clearTimeout(autoTimer);
       autoTimer = setTimeout(() => App.push(message, true), 1200);
     },
