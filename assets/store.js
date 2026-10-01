@@ -303,6 +303,63 @@
     return merged;
   }
 
+  /* ---------------- 本机推送代理（机器发请求，浏览器不持有令牌） ---------------- */
+  function agentConfig() {
+    try {
+      const cfg = JSON.parse(localStorage.getItem('monitoring:agent:v1') || 'null');
+      return cfg && cfg.url ? cfg : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveAgentConfig(cfg) {
+    if (!cfg || !cfg.url) localStorage.removeItem('monitoring:agent:v1');
+    else localStorage.setItem('monitoring:agent:v1', JSON.stringify({ url: String(cfg.url).replace(/\/+$/, ''), key: cfg.key || '' }));
+  }
+
+  async function agentRequest(pathname, options = {}, timeoutMs = 15000) {
+    const cfg = agentConfig();
+    if (!cfg) throw new Error('未配置本机代理');
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const res = await fetch(cfg.url + pathname, {
+        ...options,
+        signal: ctrl.signal,
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': cfg.key || '', ...(options.headers || {}) }
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+      return body;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  const agentPush = (data, message) =>
+    agentRequest('/api/status', { method: 'POST', body: JSON.stringify({ message, data }) });
+  const agentState = () => agentRequest('/api/state');
+  const agentPull = () => agentRequest('/api/pull', { method: 'POST' });
+
+  /* 探测某地址是否跑着代理：present = 有代理；authorized = 密钥可用 */
+  async function agentProbe(url, key) {
+    if (!url) return { present: false, authorized: false };
+    try {
+      const res = await fetch(String(url).replace(/\/+$/, '') + '/api/state', {
+        cache: 'no-store',
+        headers: key ? { 'X-Admin-Key': key } : {}
+      });
+      if (res.status === 401) return { present: true, authorized: false };
+      if (!res.ok) return { present: false, authorized: false };
+      const body = await res.json();
+      return { present: true, authorized: !!body.auth, state: body };
+    } catch (e) {
+      return { present: false, authorized: false };
+    }
+  }
+
   function exportFile(data) {
     const blob = new Blob([JSON.stringify(data, null, 2) + '\n'], { type: 'application/json' });
     const a = document.createElement('a');
@@ -317,6 +374,7 @@
     uid, emptyData, normalize, currentState, duration, stats,
     fmtDateTime, fmtTime, fmtDay, fmtDuration, fmtRelative, toLocalInput, fromLocalInput,
     loadLocal, saveLocal, fetchFile, load, upsertRecord, removeRecord, stopRecord,
-    syncConfig, saveSyncConfig, pull, push, merge, exportFile, b64, ts, byStartDesc
+    syncConfig, saveSyncConfig, pull, push, merge, exportFile, b64, ts, byStartDesc,
+    agentConfig, saveAgentConfig, agentPush, agentState, agentPull, agentProbe
   };
 })(window);

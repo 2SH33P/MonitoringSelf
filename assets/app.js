@@ -89,15 +89,19 @@
 
     autoPush(message) {
       const cfg = M.syncConfig();
-      if (!cfg || !cfg.auto) return;
+      const agent = M.agentConfig();
+      if (!agent && (!cfg || !cfg.auto)) return;
       clearTimeout(autoTimer);
       autoTimer = setTimeout(() => App.push(message, true), 1200);
     },
 
+    /* 推送：优先本机代理（机器发请求），否则回落到浏览器直连 GitHub */
     async push(message, silent) {
+      const msg = message || `chore(status): 更新状态记录 (${new Date().toISOString().slice(0, 16)})`;
+      if (M.agentConfig()) return App.pushViaAgent(msg, silent);
       if (!M.syncConfig()) {
         if (!silent) {
-          UI.toast('还没有配置 GitHub，正在打开设置页…', 'error');
+          UI.toast('还没有配置推送方式，正在打开设置页…', 'error');
           setTimeout(() => (location.href = 'settings.html'), 900);
         }
         return null;
@@ -114,6 +118,46 @@
         UI.toast('同步失败：' + (e.message || e), 'error', 6000);
         return null;
       }
+    },
+
+    /* 交给本机代理：立即回执，后台提交推送，前端轮询结果，全程不阻塞 */
+    async pushViaAgent(message, silent) {
+      try {
+        await M.agentPush(App.data, message);
+        UI.toast(silent ? '已交给本机代理，正在推送…' : '已交给本机代理，正在后台推送…', 'info', 1800);
+        App.pollAgent();
+        return App.data;
+      } catch (e) {
+        UI.toast('本机代理推送失败：' + (e.message || e), 'error', 6000);
+        return null;
+      }
+    },
+
+    /* 轮询代理状态，把提交/推送结果补一个提示（不阻塞页面） */
+    pollAgent(tries = 8) {
+      clearTimeout(App._poll);
+      const tick = async (n) => {
+        let st;
+        try {
+          st = await M.agentState();
+        } catch (e) {
+          return;
+        }
+        if (st.pending && n > 0) {
+          App._poll = setTimeout(() => tick(n - 1), 1200);
+          return;
+        }
+        const lp = st.lastPush;
+        if (lp) {
+          UI.toast(
+            lp.ok ? `已推送到 GitHub · ${lp.message}` : `推送失败：${lp.detail}`,
+            lp.ok ? 'ok' : 'error',
+            lp.ok ? 3500 : 8000
+          );
+          App.onState && App.onState(st);
+        }
+      };
+      App._poll = setTimeout(() => tick(tries), 900);
     },
 
     async pull() {
@@ -138,8 +182,15 @@
     },
 
     syncFlag() {
+      if (M.agentConfig()) return '经本机代理推送';
       const cfg = M.syncConfig();
       return cfg ? (cfg.auto ? '自动同步已开启' : '自动同步关闭') : '未配置同步';
+    },
+
+    transportName() {
+      if (M.agentConfig()) return '本机代理';
+      if (M.syncConfig()) return '浏览器直连 GitHub';
+      return '仅本地';
     },
 
     syncStateHtml() {

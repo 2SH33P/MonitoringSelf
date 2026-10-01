@@ -18,6 +18,42 @@
     $('#owner-bio').value = App.data.owner.bio || '';
   }
 
+  function renderAgent(st) {
+    const cfg = M.agentConfig();
+    $('#agent-flag').textContent = cfg ? '已启用 · ' + App.transportName() : '未启用';
+    if (!st || !st.present) {
+      $('#agent-state').innerHTML =
+        UI.presenceHtml('offline', '没探测到代理') +
+        '<span class="caption1">先在本机启动 <span class="mono">node tools/agent.mjs</span>，再点「保存并测试连接」</span>';
+      return;
+    }
+    if (!st.authorized) {
+      $('#agent-state').innerHTML = UI.presenceHtml('away', '代理在线 · 需要密钥') +
+        '<span class="caption1">把代理启动日志里的密钥填到下面</span>';
+      return;
+    }
+    const lp = (st.state && st.state.lastPush) || null;
+    const remotes = (st.state && st.state.remotes) || [];
+    $('#agent-state').innerHTML =
+      UI.presenceHtml('available', '代理在线') +
+      `<span class="caption1 mono">${UI.esc(remotes.map((r) => r.name).join(' + ') || '无 remote')}</span>` +
+      (lp
+        ? `<span class="caption1">· 最后推送 ${UI.esc(M.fmtRelative(lp.at))}${lp.ok ? ' 成功' : ' 失败'}</span>`
+        : '<span class="caption1">· 还没有推送记录</span>') +
+      (st.state && st.state.head ? `<span class="caption1 mono">· ${UI.esc(st.state.head)}</span>` : '');
+  }
+
+  async function probeAgent(fillDefault = false) {
+    const cfg = M.agentConfig() || {};
+    if (fillDefault && !$('#agent-url').value) $('#agent-url').value = cfg.url || location.origin;
+    if (!cfg.key && !$('#agent-key').value && fillDefault) $('#agent-key').value = '';
+    const url = $('#agent-url').value.trim() || cfg.url || location.origin;
+    const key = $('#agent-key').value.trim() || cfg.key || '';
+    const st = await M.agentProbe(url, key);
+    renderAgent(st);
+    return { st, url, key };
+  }
+
   function renderState() {
     $('#sync-state').innerHTML = App.syncStateHtml();
     $('#data-hint').textContent = `${App.data.records.length} 条记录 · 更新于 ${M.fmtDateTime(App.data.updatedAt)}`;
@@ -56,6 +92,46 @@
   }
 
   function wire() {
+    // ---- 本机代理 ----
+    $('#agent-save').addEventListener('click', async () => {
+      const { st, url, key } = await probeAgent();
+      if (!st.present) return UI.toast('这个地址上没有代理响应', 'error');
+      if (!st.authorized) return UI.toast('密钥不对，看代理启动日志里的那一串', 'error');
+      M.saveAgentConfig({ url, key });
+      renderState();
+      UI.toast('本机代理已启用，之后的开始/结束/修改都由机器推送');
+    });
+
+    $('#agent-push').addEventListener('click', () =>
+      withBusy($('#agent-push'), '推送中…', async () => {
+        await App.push();
+        setTimeout(probeAgent, 1500);
+      })
+    );
+
+    $('#agent-pull').addEventListener('click', () =>
+      withBusy($('#agent-pull'), '拉取中…', async () => {
+        try {
+          const r = await M.agentPull();
+          if (r && r.data) {
+            App.data = M.saveLocal(M.normalize(r.data));
+            fillForm();
+            renderState();
+            UI.toast('已从远程拉取并合并');
+          }
+        } catch (e) {
+          UI.toast('拉取失败：' + (e.message || e), 'error', 6000);
+        }
+      })
+    );
+
+    $('#agent-off').addEventListener('click', () => {
+      M.saveAgentConfig(null);
+      renderAgent(null);
+      renderState();
+      UI.toast('已停用本机代理');
+    });
+
     $('#cfg-save').addEventListener('click', saveConfig);
 
     $('#cfg-push').addEventListener('click', () => {
@@ -142,6 +218,7 @@
     fillForm();
     renderState();
     wire();
+    probeAgent(true);
     UI.mountFooter('#page-footer', App.data);
   }
 

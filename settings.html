@@ -90,11 +90,45 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
     <main class="content">
       <div class="stack">
         <div class="grid-2">
-          <!-- GitHub 同步 -->
+          <!-- 本机推送代理（推荐）：机器发请求，浏览器不持有令牌 -->
           <section class="card card--flush">
             <div class="card__head">
               <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sync"></use></svg>
-              <span class="card__title">GitHub 同步</span>
+              <span class="card__title">本机推送代理（推荐）</span>
+              <span class="grow"></span>
+              <span class="caption1" id="agent-flag"></span>
+            </div>
+            <div class="card__body stack-s">
+              <div class="row" id="agent-state"></div>
+              <p class="caption1">由运行在本机的代理（<span class="mono">node tools/agent.mjs</span>）用本机 git 凭据提交并推送到 GitHub —— 浏览器里不需要任何令牌，所有 GitHub 请求都由机器发出。密钥在代理启动日志里，文件为 <span class="mono">~/.monitoring-agent.key</span>。</p>
+              <div class="field">
+                <label class="field__label" for="agent-url">代理地址</label>
+                <input class="input" id="agent-url" placeholder="http://[::1]:8098" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="field__label" for="agent-key">管理密钥</label>
+                <input class="input" id="agent-key" type="password" placeholder="代理启动时打印的那串" autocomplete="off">
+              </div>
+              <div class="actions-row">
+                <button class="btn btn--primary" id="agent-save" type="button">保存并测试连接</button>
+                <button class="btn btn--secondary" id="agent-push" type="button">
+                  <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+                  <span>立即推送</span>
+                </button>
+                <button class="btn btn--subtle" id="agent-pull" type="button">
+                  <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+                  <span>从远程拉取</span>
+                </button>
+                <button class="btn btn--danger" id="agent-off" type="button">停用代理</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- GitHub 直连（兜底） -->
+          <section class="card card--flush">
+            <div class="card__head">
+              <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+              <span class="card__title">浏览器直连 GitHub（兜底）</span>
             </div>
             <div class="card__body stack-s">
               <div class="row" id="sync-state"></div>

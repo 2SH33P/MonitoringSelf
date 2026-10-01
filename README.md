@@ -82,6 +82,36 @@ data/status.json
 
 `edit.html` / `assets/edit.js` / 测试 / 脚本一律不进 `_site`，线上站点上不存在编辑功能。之后每次提交 `data/status.json`（或点编辑页的「发布到 GitHub」）都会触发重新部署，地址 `https://<you>.github.io/Monitoring/`。
 
+## 两个远端仓库
+
+| remote | 仓库 | 作用 |
+|---|---|---|
+| `origin` | `2SH33P/Monitoring` | 项目本体（代码 + 示例/当前数据），Pages：https://2sh33p.github.io/Monitoring/ |
+| `self` | `2SH33P/MonitoringSelf` | 我自己的库（同一套代码 + 我的真实记录），Pages：https://2sh33p.github.io/MonitoringSelf/ |
+
+```bash
+git push origin main && git push self main
+```
+
+两个仓库都用 GitHub Actions 白名单构建，Pages 源为 GitHub Actions（`build_type=workflow`）。
+
+## 本机推送代理（让机器去请求 GitHub）
+
+浏览器不能写文件、也不该持有令牌，所以由本机进程代劳：
+
+```bash
+node tools/agent.mjs          # 默认监听 [::]:8098，可用 PORT / HOST / AGENT_REMOTES 覆盖
+```
+
+- 既托管静态站点，又提供写入接口：
+  - `GET  /api/state`  代理状态（最后推送结果、remote、HEAD）
+  - `POST /api/status` `{message, data}` → 写 `data/status.json` → 后台 `git commit` + `git push self/origin`
+  - `POST /api/pull`   从远程 `git pull --ff-only`
+- 鉴权：回环地址免密钥；其它来源（例如手机走公网 IPv6）必须带 `X-Admin-Key`。密钥首次启动生成，存在 `~/.monitoring-agent.key`（**不在仓库里**），删掉即可轮换。
+- 在「设置 → 本机推送代理」里填 地址 + 密钥，点「保存并测试连接」即生效；此后每次开始/结束/修改都由**机器**提交推送，浏览器里不需要任何 GitHub 令牌。
+- 前端是 fire-and-forget：先本地生效（内存 + localStorage）、代理立即回 202、后台提交推送，页面轮询结果补个提示，所以推送慢也不会卡操作。
+- 「浏览器直连 GitHub」（PAT）保留为兜底，未配置代理时才会用到。
+
 ## 在浏览器里直接发布（无需命令行）
 
 1. 本地打开 `edit.html` → 「同步设置」
