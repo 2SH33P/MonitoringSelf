@@ -79,7 +79,10 @@
     let ok = forced || location.protocol === 'file:';
     if (!ok) {
       try {
-        ok = (await fetch('edit.html', { method: 'HEAD', cache: 'no-store' })).ok;
+        // 只有本站真的存在 edit.html（且是真 HTML）才渲染按钮：
+        // GitHub Pages 白名单里没有它 → 404 → 不渲染任何入口
+        const res = await fetch('edit.html', { method: 'HEAD', cache: 'no-store' });
+        ok = res.ok && (res.headers.get('content-type') || '').includes('text/html');
       } catch (e) {
         ok = false;
       }
