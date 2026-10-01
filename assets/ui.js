@@ -42,14 +42,11 @@
     const { tone, text } = presenceOf(record, now);
     const kind = M.kindOf(record.kind);
     return `<div class="stack">
-      <div class="row row--between">
-        ${presenceHtml(tone, text, true)}
-        <span class="caption1">${running ? '已持续' : '总时长'} ${esc(M.fmtDuration(M.duration(record, now)))}</span>
-      </div>
+      ${presenceHtml(tone, text, true)}
       <p class="hero__activity">${esc(record.activity || '(未填写活动内容)')}</p>
       <div class="row">
         <span class="hero__timer" data-hero-timer>${esc(M.fmtDuration(M.duration(record, now)))}</span>
-        <span class="caption1">自 ${esc(M.fmtDateTime(record.start))} 起</span>
+        <span class="caption1">${running ? '已持续，自' : '总时长，起于'} ${esc(M.fmtDateTime(record.start))}</span>
       </div>
       <dl class="meta-grid">
         <div><dt>起始时间</dt><dd class="num">${esc(M.fmtDateTime(record.start))}</dd></div>

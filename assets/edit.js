@@ -147,6 +147,7 @@
   function renderPreview() {
     const now = Date.now();
     const view = previewData();
+    UI.applyIdentity(view, now);
     $('#preview-hero').innerHTML = UI.heroHtml(view, now);
     $('#preview-timeline').innerHTML = UI.timelineHtml(view.records.slice(0, 3), now, '发表后，记录会出现在时间线里。');
   }
