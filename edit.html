@@ -5,170 +5,263 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Monitoring · 编辑状态</title>
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='%230f6cbd'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
 <link rel="stylesheet" href="assets/tokens.min.css">
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<header class="app-header">
-  <span class="app-header__brand">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
-    </svg>
-    <span>Monitoring</span>
-  </span>
-  <nav class="row" aria-label="主导航">
-    <a class="nav-link" href="index.html">总览</a>
-    <a class="nav-link" href="edit.html" aria-current="page">编辑状态</a>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 20 20"><path d="M3.5 9.2 10 3.6l6.5 5.6V16a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8 17v-4.2h4V17"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 20 20"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5.8V10l3 1.8"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 20 20"><path d="M3.2 10.9V4.4a1.2 1.2 0 0 1 1.2-1.2h6.5a1.2 1.2 0 0 1 .85.35l5.1 5.1a1.2 1.2 0 0 1 0 1.7l-6.25 6.25a1.2 1.2 0 0 1-1.7 0l-5.1-5.1a1.2 1.2 0 0 1-.35-.85z"/><circle cx="6.6" cy="6.6" r="1.1"/></symbol>
+  <symbol id="i-note" viewBox="0 0 20 20"><path d="M5.2 3h9.6a1.2 1.2 0 0 1 1.2 1.2v11.6a1.2 1.2 0 0 1-1.2 1.2H5.2A1.2 1.2 0 0 1 4 15.8V4.2A1.2 1.2 0 0 1 5.2 3z"/><path d="M7 7h6M7 10h6M7 13h3.5"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.4 10h1.8l1.2-2.6 1.6 5 1.2-2.4h1.4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 9v4.6M10 6.5h.01"/></symbol>
+  <symbol id="i-error" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6.4v4.4M10 13.4h.01"/></symbol>
+  <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.8 10.2l2.2 2.2 4.2-4.6"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 20 20"><path d="M16.6 12.1A7 7 0 0 1 7.9 3.4a7 7 0 1 0 8.7 8.7z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.6v1.6M10 15.8v1.6M17.4 10h-1.6M4.2 10H2.6M15.2 4.8l-1.1 1.1M5.9 14.1l-1.1 1.1M15.2 15.2l-1.1-1.1M5.9 5.9 4.8 4.8"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 20 20"><path d="M10 12.8V3.4M6.4 7 10 3.4 13.6 7"/><path d="M4 12.4v3.4a1.2 1.2 0 0 0 1.2 1.2h9.6a1.2 1.2 0 0 0 1.2-1.2v-3.4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 20 20"><path d="M10 3.4v9.4M6.4 9.2 10 12.8l3.6-3.6"/><path d="M4 12.4v3.4a1.2 1.2 0 0 0 1.2 1.2h9.6a1.2 1.2 0 0 0 1.2-1.2v-3.4"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 20 20"><path d="M15.8 8A6 6 0 0 0 4.9 6.6M4.2 12A6 6 0 0 0 15.1 13.4"/><path d="M15.8 4.4V8h-3.6M4.2 15.6V12h3.6"/></symbol>
+  <symbol id="i-options" viewBox="0 0 20 20"><path d="M3.4 6.6h2.3M9.5 6.6h7.1M3.4 13.4h7.1M14.3 13.4h2.3"/><circle cx="7.6" cy="6.6" r="1.9"/><circle cx="12.4" cy="13.4" r="1.9"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 20 20"><rect x="5.4" y="5.4" width="9.2" height="9.2" rx="1.6"/></symbol>
+  <symbol id="i-delete" viewBox="0 0 20 20"><path d="M4.2 6.2h11.6"/><path d="M8 6.2V4.6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.6"/><path d="M6.4 6.2l.6 9.4a1.1 1.1 0 0 0 1.1 1h3.8a1.1 1.1 0 0 0 1.1-1l.6-9.4"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 20 20"><path d="M5.6 8l4.4 4.4L14.4 8"/></symbol>
+  <symbol id="i-person" viewBox="0 0 20 20"><circle cx="10" cy="7.2" r="3.2"/><path d="M4 16.6c.6-3.2 3-4.6 6-4.6s5.4 1.4 6 4.6"/></symbol>
+</svg>
+
+<div class="layout">
+  <nav class="rail" aria-label="主导航">
+    <div class="rail__brand">
+      <span class="rail__logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>Monitoring</span>
+    </div>
+    <p class="caption2 rail__label">工作区</p>
+    <a class="navitem" href="index.html">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+      <span>总览</span>
+    </a>
+    <a class="navitem" href="edit.html" aria-current="page">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+      <span>编辑状态</span>
+    </a>
+    <div class="rail__spacer"></div>
+    <div class="rail__me">
+      <span class="avatar" data-avatar aria-hidden="true">M</span>
+      <div class="stack-xs">
+        <span class="body1Strong" data-me-name>Monitoring</span>
+        <span class="presence presence--offline"><span class="presence__dot"></span><span data-me-state>加载中</span></span>
+      </div>
+    </div>
   </nav>
-  <span class="app-header__spacer"></span>
-  <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题">☾</button>
-</header>
 
-<main class="shell">
-  <div class="stack">
-    <div class="row row--between">
-      <div>
-        <h1 class="title3">编辑状态</h1>
-        <p class="caption1">在这里更新当前状态并保留历史记录；保存后可在「总览」看到他人视角的效果。</p>
+  <div class="main">
+    <header class="commandbar">
+      <span class="commandbar__title">编辑状态</span>
+      <span class="commandbar__spacer"></span>
+      <div class="commandbar__group">
+        <a class="navitem" style="height:32px" href="index.html">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+          <span>查看总览</span>
+        </a>
+        <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题"></button>
+        <button class="btn btn--secondary" id="save-local" type="button">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+          保存到本地
+        </button>
+        <button class="btn btn--secondary" id="push-btn" type="button">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+          发布到 GitHub
+        </button>
       </div>
-      <div class="row">
-        <button class="btn btn--secondary" id="save-local" type="button">保存到本地</button>
-        <button class="btn btn--secondary" id="push-btn" type="button">发布到 GitHub</button>
-      </div>
-    </div>
+    </header>
 
-    <div class="grid-2">
-      <!-- 左：QQ 空间式发表框 -->
-      <section class="composer" aria-label="状态编辑器">
-        <div class="composer__tabs" role="tablist">
-          <button class="composer__tab" role="tab" aria-selected="true" id="composer-tab">发表状态</button>
-        </div>
-
-        <div class="composer__body">
-          <label class="hide" for="activity">活动内容</label>
-          <textarea class="composer__editable" id="activity" maxlength="60"
-            placeholder="分享这一刻在做什么…（活动内容，最多 60 字）"></textarea>
-
-          <div class="composer__toolbar">
-            <button class="tool" type="button" data-toggle="time" aria-expanded="true">⏱ 时间范围</button>
-            <button class="tool" type="button" data-toggle="kind" aria-expanded="true">🏷 活动类型</button>
-            <button class="tool" type="button" data-toggle="note" aria-expanded="false">📝 备注</button>
-            <span class="grow"></span>
-            <span class="caption1" id="editing-hint"></span>
-          </div>
-
-          <div class="composer__panel" id="panel-time">
-            <div class="field">
-              <label class="field__label" for="start">起始时间</label>
-              <input class="input" type="datetime-local" id="start">
-            </div>
-            <div class="field">
-              <label class="field__label" for="end">终止时间</label>
-              <input class="input" type="datetime-local" id="end">
-              <label class="check" for="ongoing"><input type="checkbox" id="ongoing"> 至今（进行中）</label>
-            </div>
-          </div>
-
-          <div class="composer__panel" id="panel-kind">
-            <div class="field">
-              <label class="field__label" for="kind">活动类型</label>
-              <select class="select" id="kind"></select>
-            </div>
-          </div>
-
-          <div class="composer__panel" id="panel-note" hidden>
-            <div class="field">
-              <label class="field__label" for="note">备注</label>
-              <textarea class="textarea" id="note" maxlength="1000" placeholder="补充说明，会显示在记录卡片里"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="composer__footer">
-          <span class="counter" id="counter">还可以输入 60 字</span>
-          <div class="row">
-            <button class="btn btn--subtle hide" id="cancel-edit" type="button">取消编辑</button>
-            <button class="btn btn--subtle" id="reset-btn" type="button">清空</button>
-            <button class="btn btn--primary" id="submit-btn" type="button">发表</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 右：预览 / 身份 / 同步 -->
+    <main class="content">
       <div class="stack">
-        <section class="card">
-          <div class="row row--between">
-            <h2 class="subtitle2">预览 · 他人看到的样子</h2>
-            <span class="caption1">实时</span>
-          </div>
-          <div class="preview-frame" style="margin-top: var(--spacingVerticalL)">
-            <div class="preview-frame__bar">
-              <span class="preview-frame__dot"></span><span class="preview-frame__dot"></span><span class="preview-frame__dot"></span>
-              <span class="caption2" style="margin-left: var(--spacingHorizontalS)">monitoring · 总览</span>
+        <div class="grid-2">
+          <!-- 左：QQ 空间式发表框 -->
+          <section class="composer" aria-label="状态编辑器">
+            <div class="composer__tabs" role="tablist">
+              <button class="composer__tab" role="tab" aria-selected="true" id="composer-tab">发表状态</button>
+              <span class="composer__tab composer__tab--muted">记录历史</span>
             </div>
-            <div class="preview-frame__body stack">
-              <div id="preview-hero"></div>
-              <hr class="divider">
-              <div id="preview-timeline"></div>
+
+            <div class="composer__body">
+              <label class="hide" for="activity">活动内容</label>
+              <textarea class="composer__editable" id="activity" maxlength="60"
+                placeholder="分享这一刻在做什么…（活动内容，最多 60 字）"></textarea>
+
+              <div class="composer__toolbar">
+                <button class="tool" type="button" data-toggle="time" aria-expanded="true">
+                  <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
+                  时间范围
+                </button>
+                <button class="tool" type="button" data-toggle="kind" aria-expanded="true">
+                  <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-tag"></use></svg>
+                  活动类型
+                </button>
+                <button class="tool" type="button" data-toggle="note" aria-expanded="false">
+                  <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-note"></use></svg>
+                  备注
+                </button>
+                <span class="grow"></span>
+                <span class="caption1" id="editing-hint"></span>
+              </div>
+
+              <div class="composer__panel" id="panel-time">
+                <div class="field">
+                  <label class="field__label" for="start">起始时间</label>
+                  <input class="input" type="datetime-local" id="start">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="end">终止时间</label>
+                  <input class="input" type="datetime-local" id="end">
+                  <label class="check" for="ongoing"><input type="checkbox" id="ongoing"> 至今（进行中）</label>
+                </div>
+              </div>
+
+              <div class="composer__panel" id="panel-kind">
+                <div class="field">
+                  <label class="field__label" for="kind">活动类型</label>
+                  <span class="select-wrap">
+                    <select class="select" id="kind"></select>
+                    <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-chevron"></use></svg>
+                  </span>
+                </div>
+              </div>
+
+              <div class="composer__panel" id="panel-note" hidden>
+                <div class="field">
+                  <label class="field__label" for="note">备注</label>
+                  <textarea class="textarea" id="note" maxlength="1000" placeholder="补充说明，会显示在记录卡片里"></textarea>
+                </div>
+              </div>
             </div>
+
+            <div class="composer__footer">
+              <span class="counter" id="counter">还可以输入 60 字</span>
+              <div class="row">
+                <button class="btn btn--subtle hide" id="cancel-edit" type="button">取消编辑</button>
+                <button class="btn btn--subtle" id="reset-btn" type="button">清空</button>
+                <button class="btn btn--primary" id="submit-btn" type="button">发表</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 右：预览 / 同步 / 身份 -->
+          <div class="stack">
+            <section class="card card--flush">
+              <div class="card__head">
+                <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pulse"></use></svg>
+                <span class="card__title">预览 · 他人看到的样子</span>
+                <span class="grow"></span>
+                <span class="caption1">实时</span>
+              </div>
+              <div class="card__body">
+                <div class="preview-frame">
+                  <div class="preview-frame__bar">
+                    <span class="preview-frame__dot"></span><span class="preview-frame__dot"></span><span class="preview-frame__dot"></span>
+                    <span class="caption2" style="margin-left: var(--spacingHorizontalS)">MONITORING · 总览</span>
+                  </div>
+                  <div class="preview-frame__body stack">
+                    <div id="preview-hero"></div>
+                    <hr class="divider">
+                    <div id="preview-timeline"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card card--flush">
+              <div class="card__head">
+                <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sync"></use></svg>
+                <span class="card__title">发布与同步</span>
+              </div>
+              <div class="card__body stack-s">
+                <div class="row" id="sync-state"></div>
+                <div class="row">
+                  <button class="btn btn--subtle" id="pull-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sync"></use></svg>
+                    从 GitHub 拉取
+                  </button>
+                  <button class="btn btn--subtle" id="sync-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-options"></use></svg>
+                    同步设置
+                  </button>
+                </div>
+                <hr class="divider">
+                <div class="row">
+                  <button class="btn btn--secondary" id="export-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+                    导出 JSON
+                  </button>
+                  <button class="btn btn--secondary" id="import-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-upload"></use></svg>
+                    导入 JSON
+                  </button>
+                  <input class="hide" type="file" id="import-file" accept="application/json">
+                  <button class="btn btn--danger" id="clear-btn" type="button">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-delete"></use></svg>
+                    清空全部记录
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="card card--flush">
+              <div class="card__head">
+                <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-person"></use></svg>
+                <span class="card__title">身份信息</span>
+              </div>
+              <div class="card__body stack-s">
+                <div class="field">
+                  <label class="field__label" for="owner-name">名称</label>
+                  <input class="input" id="owner-name" maxlength="40" placeholder="例如：张三">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="owner-bio">一句话简介</label>
+                  <input class="input" id="owner-bio" maxlength="200" placeholder="例如：在读研究生 / 后端工程师">
+                </div>
+              </div>
+            </section>
           </div>
+        </div>
+
+        <section class="card card--flush">
+          <div class="card__head">
+            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
+            <span class="card__title">记录管理</span>
+            <span class="grow"></span>
+            <span class="caption1" id="count-hint"></span>
+          </div>
+          <div class="table-scroll">
+            <table class="table">
+              <thead>
+                <tr><th>活动内容</th><th>状态</th><th>起止时间</th><th>时长</th><th>操作</th></tr>
+              </thead>
+              <tbody id="records"></tbody>
+            </table>
+          </div>
+          <div id="records-empty"></div>
         </section>
 
-        <section class="card stack-s">
-          <h2 class="subtitle2">发布与同步</h2>
-          <div class="sync-state" id="sync-state"></div>
-          <div class="row">
-            <button class="btn btn--subtle" id="pull-btn" type="button">从 GitHub 拉取</button>
-            <button class="btn btn--subtle" id="sync-btn" type="button">同步设置…</button>
-          </div>
-          <hr class="divider">
-          <div class="row">
-            <button class="btn btn--secondary" id="export-btn" type="button">导出 JSON</button>
-            <button class="btn btn--secondary" id="import-btn" type="button">导入 JSON</button>
-            <input class="hide" type="file" id="import-file" accept="application/json">
-            <button class="btn btn--danger" id="clear-btn" type="button">清空全部记录</button>
-          </div>
-        </section>
-
-        <section class="card stack-s">
-          <h2 class="subtitle2">身份信息</h2>
-          <div class="field">
-            <label class="field__label" for="owner-name">名称</label>
-            <input class="input" id="owner-name" maxlength="40" placeholder="例如：张三">
-          </div>
-          <div class="field">
-            <label class="field__label" for="owner-bio">一句话简介</label>
-            <input class="input" id="owner-bio" maxlength="200" placeholder="例如：在读研究生 / 后端工程师">
-          </div>
-        </section>
+        <p class="caption1" id="page-footer"></p>
       </div>
-    </div>
-
-    <section class="card card--flush">
-      <div class="row row--between" style="padding: var(--spacingHorizontalL)">
-        <h2 class="subtitle2">记录管理</h2>
-        <span class="caption1" id="count-hint"></span>
-      </div>
-      <table class="table">
-        <thead>
-          <tr><th>活动内容</th><th>类型</th><th>起止时间</th><th>时长</th><th>操作</th></tr>
-        </thead>
-        <tbody id="records"></tbody>
-      </table>
-      <div id="records-empty"></div>
-    </section>
-
-    <p class="caption1" id="page-footer"></p>
+    </main>
   </div>
-</main>
+</div>
 
 <!-- 同步设置对话框 -->
 <div class="dialog-backdrop hide" id="sync-dialog" role="dialog" aria-modal="true" aria-labelledby="sync-title">
   <div class="dialog stack">
-    <div>
-      <h2 class="subtitle1" id="sync-title">GitHub 同步设置</h2>
-      <p class="caption1">保存时直接向仓库提交 <span class="mono">data/status.json</span>，GitHub Pages 会自动重新发布。Token 只存在本机 localStorage，不会写进仓库；建议使用只勾选 <span class="mono">Contents: Read and write</span> 的细粒度 Token。</p>
+    <div class="row row--top">
+      <span class="avatar" aria-hidden="true"><svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#i-sync"></use></svg></span>
+      <div class="stack-xs">
+        <h2 class="subtitle2" id="sync-title">GitHub 同步设置</h2>
+        <p class="caption1">保存时直接向仓库提交 <span class="mono">data/status.json</span>，GitHub Pages 会自动重新发布。Token 只存在本机 localStorage；建议使用只勾选 <span class="mono">Contents: Read and write</span> 的细粒度 Token。</p>
+      </div>
     </div>
     <div class="field">
       <label class="field__label" for="cfg-owner">仓库所有者（用户名或组织）</label>

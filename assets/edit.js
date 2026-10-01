@@ -114,23 +114,24 @@
     $('#count-hint').textContent = list.length ? `共 ${list.length} 条 · 点「结束」可给进行中的记录补上终止时间` : '';
     $('#records-empty').innerHTML = list.length
       ? ''
-      : '<div class="empty"><p class="subtitle2">还没有任何记录</p><p class="body1 muted">在上面写下这一刻在做什么，然后点「发表」。</p></div>';
+      : `<div class="empty">${UI.icon('clock', 32)}<p class="subtitle2">还没有任何记录</p><p class="body1 muted">在上面写下这一刻在做什么，然后点「发表」。</p></div>`;
     body.innerHTML = list
       .map((r) => {
         const running = !r.end || M.ts(r.end) > now;
+        const p = UI.presenceOf(r, now);
         return `<tr>
         <td>
           <div class="body1Strong">${UI.esc(r.activity || '(未填写活动内容)')}</div>
           ${r.note ? `<div class="caption1" style="margin-top:4px">${UI.esc(r.note.slice(0, 80))}${r.note.length > 80 ? '…' : ''}</div>` : ''}
         </td>
-        <td>${UI.badgeHtml(r, now)}</td>
+        <td>${UI.presenceHtml(p.tone, p.text)}</td>
         <td class="num caption1">${UI.esc(M.fmtDateTime(r.start))}<br>→ ${r.end ? UI.esc(M.fmtDateTime(r.end)) : '进行中'}</td>
         <td class="num">${UI.esc(M.fmtDuration(M.duration(r, now)))}</td>
-        <td>
-          ${running ? `<button class="btn btn--subtle" data-act="stop" data-id="${r.id}" type="button">结束</button>` : ''}
-          <button class="btn btn--subtle" data-act="edit" data-id="${r.id}" type="button">编辑</button>
-          <button class="btn btn--danger" data-act="delete" data-id="${r.id}" type="button">删除</button>
-        </td>
+        <td><div class="row-actions">
+          ${running ? `<button class="btn btn--subtle" data-act="stop" data-id="${r.id}" type="button">${UI.icon('stop', 16)}结束</button>` : ''}
+          <button class="btn btn--subtle" data-act="edit" data-id="${r.id}" type="button">${UI.icon('edit', 16)}编辑</button>
+          <button class="btn btn--danger" data-act="delete" data-id="${r.id}" type="button">${UI.icon('delete', 16)}删除</button>
+        </div></td>
       </tr>`;
       })
       .join('');
@@ -153,10 +154,12 @@
   function renderSyncState() {
     const cfg = M.syncConfig();
     const local = M.loadLocal();
-    $('#sync-state').innerHTML = cfg
-      ? `<span class="badge badge--up">GitHub 已配置</span><span class="caption1 mono">${UI.esc(cfg.owner)}/${UI.esc(cfg.repo)}@${UI.esc(cfg.branch)} · ${UI.esc(cfg.path)}</span>`
-      : '<span class="badge badge--idle">仅本地</span><span class="caption1">数据保存在本机浏览器；配置 GitHub 后可一键发布给其他人看。</span>';
-    if (local) $('#sync-state').insertAdjacentHTML('beforeend', `<span class="caption1">· 最后保存 ${UI.esc(M.fmtRelative(local.updatedAt))}</span>`);
+    $('#sync-state').innerHTML =
+      UI.presenceHtml(cfg ? 'available' : 'offline', cfg ? 'GitHub 已配置' : '仅本地') +
+      (cfg
+        ? `<span class="caption1 mono">${UI.esc(cfg.owner)}/${UI.esc(cfg.repo)}@${UI.esc(cfg.branch)} · ${UI.esc(cfg.path)}</span>`
+        : '<span class="caption1">数据存在本机浏览器；配置 GitHub 后可一键发布给其他人看。</span>') +
+      (local ? `<span class="caption1">· 最后保存 ${UI.esc(M.fmtRelative(local.updatedAt))}</span>` : '');
   }
 
   function togglePanel(name, force) {

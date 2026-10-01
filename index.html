@@ -6,58 +6,110 @@
 <title>Monitoring · 状态总览</title>
 <meta name="description" content="实时查看当前状态与历史状态记录（活动内容 / 起止时间 / 备注）。">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='%230f6cbd'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
 <link rel="stylesheet" href="assets/tokens.min.css">
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<header class="app-header">
-  <span class="app-header__brand">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
-    </svg>
-    <span>Monitoring</span>
-  </span>
-  <nav class="row" aria-label="主导航">
-    <a class="nav-link" href="index.html" aria-current="page">总览</a>
-    <a class="nav-link" href="edit.html">编辑状态</a>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 20 20"><path d="M3.5 9.2 10 3.6l6.5 5.6V16a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8 17v-4.2h4V17"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 20 20"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5.8V10l3 1.8"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.4 10h1.8l1.2-2.6 1.6 5 1.2-2.4h1.4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 9v4.6M10 6.5h.01"/></symbol>
+  <symbol id="i-error" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6.4v4.4M10 13.4h.01"/></symbol>
+  <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.8 10.2l2.2 2.2 4.2-4.6"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 20 20"><path d="M16.6 12.1A7 7 0 0 1 7.9 3.4a7 7 0 1 0 8.7 8.7z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.6v1.6M10 15.8v1.6M17.4 10h-1.6M4.2 10H2.6M15.2 4.8l-1.1 1.1M5.9 14.1l-1.1 1.1M15.2 15.2l-1.1-1.1M5.9 5.9 4.8 4.8"/></symbol>
+</svg>
+
+<div class="layout">
+  <nav class="rail" aria-label="主导航">
+    <div class="rail__brand">
+      <span class="rail__logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>Monitoring</span>
+    </div>
+    <p class="caption2 rail__label">工作区</p>
+    <a class="navitem" href="index.html" aria-current="page">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+      <span>总览</span>
+    </a>
+    <a class="navitem" href="edit.html">
+      <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+      <span>编辑状态</span>
+    </a>
+    <div class="rail__spacer"></div>
+    <div class="rail__me">
+      <span class="avatar" data-avatar aria-hidden="true">M</span>
+      <div class="stack-xs">
+        <span class="body1Strong" data-me-name>Monitoring</span>
+        <span class="presence presence--offline"><span class="presence__dot"></span><span data-me-state>加载中</span></span>
+      </div>
+    </div>
   </nav>
-  <span class="app-header__spacer"></span>
-  <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题">☾</button>
-</header>
 
-<main class="shell">
-  <div class="stack">
-    <div class="banner" id="local-banner" hidden>
-      <span>本机存在未发布的修改，当前显示的是本地版本。</span>
-      <a href="edit.html">去发布</a>
-    </div>
-
-    <div class="row row--between">
-      <div>
-        <h1 class="title3" id="owner-name">Monitoring</h1>
-        <p class="body1 muted" id="owner-bio"></p>
+  <div class="main">
+    <header class="commandbar">
+      <span class="commandbar__title">状态总览</span>
+      <span class="commandbar__spacer"></span>
+      <div class="commandbar__group">
+        <button class="btn btn--subtle btn--icon" type="button" data-theme-toggle aria-label="切换主题"></button>
+        <a class="btn btn--secondary" href="edit.html">
+          <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-edit"></use></svg>
+          编辑状态
+        </a>
       </div>
-      <p class="caption1" id="updated-at"></p>
-    </div>
+    </header>
 
-    <section class="card" data-hero aria-live="polite"></section>
+    <main class="content">
+      <div class="stack">
+        <div class="banner" id="local-banner" hidden>
+          <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-info"></use></svg>
+          <span>本机存在未发布的修改，当前显示的是本地版本。</span>
+          <a href="edit.html">去发布</a>
+        </div>
 
-    <section aria-label="统计">
-      <div id="stats"></div>
-    </section>
+        <section class="card">
+          <div class="identity">
+            <span class="avatar avatar--lg" data-avatar aria-hidden="true">M</span>
+            <div class="stack-xs grow">
+              <h1 class="subtitle1" id="owner-name">Monitoring</h1>
+              <p class="caption1" id="owner-bio"></p>
+            </div>
+            <div class="stack-xs" style="align-items: flex-end">
+              <span class="presence presence--large presence--offline" id="me-presence"><span class="presence__dot"></span><span data-me-state>加载中</span></span>
+              <span class="caption1" id="updated-at"></span>
+            </div>
+          </div>
+        </section>
 
-    <section class="card">
-      <div class="row row--between">
-        <h2 class="subtitle1">状态记录</h2>
-        <span class="caption1" id="record-count"></span>
+        <section class="card card--flush" aria-live="polite">
+          <div class="card__head">
+            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pulse"></use></svg>
+            <span class="card__title">当前状态</span>
+            <span class="grow"></span>
+            <span class="caption1" id="hero-since"></span>
+          </div>
+          <div class="card__body" data-hero></div>
+        </section>
+
+        <section class="metrics" id="metrics" aria-label="时间统计"></section>
+
+        <section class="card card--flush">
+          <div class="card__head">
+            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-clock"></use></svg>
+            <span class="card__title">状态记录</span>
+            <span class="grow"></span>
+            <span class="caption1" id="record-count"></span>
+          </div>
+          <div class="card__body" id="timeline"></div>
+        </section>
+
+        <p class="caption1" id="page-footer"></p>
       </div>
-      <div id="timeline" style="margin-top: var(--spacingVerticalL)"></div>
-    </section>
-
-    <p class="caption1" id="page-footer"></p>
+    </main>
   </div>
-</main>
+</div>
 
 <script src="assets/store.js"></script>
 <script src="assets/ui.js"></script>
