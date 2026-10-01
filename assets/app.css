@@ -726,11 +726,6 @@ svg.icon { flex: none; }
 .hide { display: none !important; }
 .divider { height: 1px; border: 0; margin: 0; background: var(--colorNeutralStroke3); }
 
-.preview-frame { border: 1px solid var(--colorNeutralStroke2); border-radius: var(--borderRadiusXLarge); overflow: hidden; background: var(--colorNeutralBackground1); }
-.preview-frame__bar { display: flex; align-items: center; gap: var(--spacingHorizontalXS); height: 32px; padding: 0 var(--spacingHorizontalM); background: var(--colorNeutralBackground3); border-bottom: 1px solid var(--colorNeutralStroke2); }
-.preview-frame__dot { width: 8px; height: 8px; border-radius: var(--borderRadiusCircular); background: var(--colorNeutralStroke1); }
-.preview-frame__body { padding: var(--spacingHorizontalL); background: var(--colorNeutralBackground1); }
-
 /* ---------- 搜索框 / 翻页器 ---------- */
 .list-toolbar {
   display: flex;

@@ -29,9 +29,6 @@
     };
   }
 
-  function formHasContent() {
-    return !!($('#activity').value.trim() || $('#note').value.trim());
-  }
 
   function renderCounter() {
     const left = MAX_ACTIVITY - $('#activity').value.length;
@@ -55,7 +52,7 @@
     $('#cancel-edit').classList.add('hide');
     if (keepTimes && keepTimes.start) $('#start').value = keepTimes.start;
     renderCounter();
-    renderPreview();
+    renderIdentity();
   }
 
   function startEdit(rec) {
@@ -73,7 +70,7 @@
     $('#cancel-edit').classList.remove('hide');
     if (rec.note) togglePanel('note', true);
     renderCounter();
-    renderPreview();
+    renderIdentity();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -102,7 +99,7 @@
     data = M.saveLocal(next);
     listState.page = 1;
     renderRecords();
-    renderPreview();
+    renderIdentity();
     renderSyncState();
     UI.toast(message);
   }
@@ -148,19 +145,9 @@
       .join('');
   }
 
-  function previewData() {
-    if (!formHasContent() && !editingId) return data;
-    const rec = draftRecord();
-    const others = data.records.filter((r) => r.id !== rec.id);
-    return M.normalize({ ...data, records: [rec, ...others] });
-  }
-
-  function renderPreview() {
-    const now = Date.now();
-    const view = previewData();
-    UI.applyIdentity(view, now);
-    $('#preview-hero').innerHTML = UI.heroHtml(view, now);
-    $('#preview-timeline').innerHTML = UI.timelineHtml(view.records.slice(0, 3), now, '发表后，记录会出现在时间线里。');
+  /* 侧栏与顶栏的身份信息：头像首字母、名称、当前 presence */
+  function renderIdentity() {
+    UI.applyIdentity(data, Date.now());
   }
 
   function renderSyncState() {
@@ -207,7 +194,7 @@
       const merged = await M.push(data, message || `chore(status): 更新状态记录 (${new Date().toISOString().slice(0, 16)})`);
       data = M.saveLocal(merged);
       renderRecords();
-      renderPreview();
+      renderIdentity();
       renderSyncState();
       UI.toast('已提交到 GitHub，Pages 约 1 分钟后更新', 'ok', 5000);
     });
@@ -229,7 +216,7 @@
       data = M.saveLocal(merged);
       fillOwnerInputs();
       renderRecords();
-      renderPreview();
+      renderIdentity();
       renderSyncState();
       UI.toast('已合并远程数据');
     });
@@ -257,7 +244,7 @@
   function bind() {
     $('#activity').addEventListener('input', () => {
       renderCounter();
-      renderPreview();
+      renderIdentity();
     });
     ['#kind', '#note', '#start', '#end'].forEach((s) =>
       ['input', 'change'].forEach((ev) => $(s).addEventListener(ev, renderPreview))
@@ -265,7 +252,7 @@
     $('#ongoing').addEventListener('change', (e) => {
       $('#end').disabled = e.target.checked;
       if (e.target.checked) $('#end').value = '';
-      renderPreview();
+      renderIdentity();
     });
     document.querySelectorAll('[data-toggle]').forEach((btn) =>
       btn.addEventListener('click', () => togglePanel(btn.dataset.toggle))
@@ -313,7 +300,7 @@
     $('#owner-bio').addEventListener('change', saveOwner);
     function saveOwner() {
       data = M.saveLocal({ ...data, owner: { name: $('#owner-name').value.trim(), bio: $('#owner-bio').value.trim() } });
-      renderPreview();
+      renderIdentity();
       UI.toast('身份信息已保存到本地');
     }
 
@@ -364,7 +351,7 @@
         data = M.saveLocal(M.merge(data, parsed));
         fillOwnerInputs();
         renderRecords();
-        renderPreview();
+        renderIdentity();
         renderSyncState();
         UI.toast('导入完成（按 id 合并）');
       } catch (err) {
@@ -392,7 +379,7 @@
     if (data.records.length) $('#kind').value = data.records[0].kind || 'work';
     renderRecords();
     renderSyncState();
-    renderPreview();
+    renderIdentity();
     bind();
     UI.mountFooter('#page-footer');
     setInterval(renderPreview, 30000); // 让预览里的时长保持新鲜

@@ -165,30 +165,8 @@ window.__DATA__=fetch("data/status.json").then(function(r){return r.ok?r.json():
             </div>
           </section>
 
-          <!-- 右：预览 / 同步 / 身份 -->
+          <!-- 右：同步 / 身份 -->
           <div class="stack">
-            <section class="card card--flush">
-              <div class="card__head">
-                <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pulse"></use></svg>
-                <span class="card__title">预览 · 他人看到的样子</span>
-                <span class="grow"></span>
-                <span class="caption1">实时</span>
-              </div>
-              <div class="card__body">
-                <div class="preview-frame">
-                  <div class="preview-frame__bar">
-                    <span class="preview-frame__dot"></span><span class="preview-frame__dot"></span><span class="preview-frame__dot"></span>
-                    <span class="caption2" style="margin-left: var(--spacingHorizontalS)">MONITORING · 总览</span>
-                  </div>
-                  <div class="preview-frame__body stack">
-                    <div id="preview-hero"></div>
-                    <hr class="divider">
-                    <div id="preview-timeline"></div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
             <section class="card card--flush">
               <div class="card__head">
                 <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sync"></use></svg>
