@@ -11,6 +11,13 @@ name: Monitoring
 
 手机上两个页面都**没有旁栏**：展示页本来就没有；编辑页在 ≤900px 时把导航收进顶栏。
 
+**展示页怎么进编辑页？** 展示页在启动时 HEAD 探测一次 `edit.html`：
+
+- 本地服务（`python3 -m http.server` 等）→ 200 → 顶栏出现「编辑状态」按钮；
+- GitHub Pages → 白名单里没有 `edit.html` → 404 → **不渲染任何编辑入口**（线上 HTML 里也没有）。
+
+也可以通过 `http://<你的地址>/index.html?admin=1` 强制显示该按钮。
+
 界面遵循 Fluent 2（Microsoft 设计语言）：只用官方 token（`assets/tokens.min.css`），浅深色、键盘可达。
 
 ## 数据

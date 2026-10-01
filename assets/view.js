@@ -71,6 +71,32 @@
     });
   }
 
+  /* 本地编辑入口：只有当本站真的存在 edit.html 时才出现。
+     本地 python/git 服务 → HEAD 200 → 按钮出现；
+     GitHub Pages 白名单里没有 edit.html → HEAD 404 → 不出现任何编辑入口。 */
+  async function mountAdminEntry() {
+    const forced = new URLSearchParams(location.search).has('admin');
+    let ok = forced || location.protocol === 'file:';
+    if (!ok) {
+      try {
+        ok = (await fetch('edit.html', { method: 'HEAD', cache: 'no-store' })).ok;
+      } catch (e) {
+        ok = false;
+      }
+    }
+    if (!ok) return;
+    const link = document.createElement('a');
+    link.className = 'btn btn--secondary';
+    link.href = 'edit.html';
+    link.title = '本地编辑页（不会部署到 GitHub Pages）';
+    link.innerHTML =
+      '<svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.4 3.6l3 3-8.9 8.9-3.8.8.8-3.8z"/><path d="M12 5l3 3"/></svg>编辑状态';
+    const bar = document.querySelector('.commandbar');
+    const toggle = bar && bar.querySelector('[data-theme-toggle]');
+    if (bar) bar.insertBefore(link, toggle || null);
+    UI.prefetchLinks();
+  }
+
   async function boot() {
     UI.initTheme();
     const hasLocal = !!M.loadLocal();
@@ -79,6 +105,7 @@
     wire();
     paint();
     UI.mountFooter('#page-footer', data);
+    mountAdminEntry();
 
     // 秒级只更新时长文案（不重排 DOM）；每 60 秒整块重绘（跨天、记录自动收尾）
     setInterval(tick, 1000);
