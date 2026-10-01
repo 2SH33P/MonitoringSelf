@@ -729,6 +729,20 @@ svg.icon { flex: none; }
 .preview-frame__dot { width: 8px; height: 8px; border-radius: var(--borderRadiusCircular); background: var(--colorNeutralStroke1); }
 .preview-frame__body { padding: var(--spacingHorizontalL); background: var(--colorNeutralBackground1); }
 
+/* ---------- 页面切换：跨文档视图过渡，导航栏保持不动 ---------- */
+@view-transition { navigation: auto; }
+
+.rail { view-transition-name: rail; }
+
+::view-transition-old(root) { animation: vt-out var(--durationFast) var(--curveAccelerateMid) both; }
+::view-transition-new(root) { animation: vt-in var(--durationNormal) var(--curveDecelerateMid) both; }
+/* 导航栏在两个页面间保持原位，不参与淡入淡出 */
+::view-transition-old(rail),
+::view-transition-new(rail) { animation: none; }
+
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+
 /* ---------- 响应式：窄屏折叠导航栏 ---------- */
 @media (max-width: 1000px) {
   .grid-2 { grid-template-columns: minmax(0, 1fr); }
@@ -759,4 +773,7 @@ svg.icon { flex: none; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
 }

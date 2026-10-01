@@ -6,6 +6,9 @@
 <title>Monitoring · 状态总览</title>
 <meta name="description" content="实时查看当前状态与历史状态记录（活动内容 / 起止时间 / 备注）。">
 <meta name="color-scheme" content="light dark">
+<!-- 首屏前先定主题，避免切换页面时闪白 -->
+<script>try{var t=localStorage.getItem("monitoring:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="prefetch" href="edit.html">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f6cbd'/></svg>">
 <link rel="stylesheet" href="assets/tokens.min.css">
 <link rel="stylesheet" href="assets/app.css">

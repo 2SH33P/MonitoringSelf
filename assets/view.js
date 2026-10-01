@@ -34,6 +34,7 @@
 
   async function boot() {
     UI.initTheme();
+    UI.prefetchLinks();
     const hasLocal = !!M.loadLocal();
     $('#local-banner').hidden = !hasLocal;
     data = await M.load();

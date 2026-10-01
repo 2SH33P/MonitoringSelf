@@ -354,6 +354,7 @@
 
   async function boot() {
     UI.initTheme();
+    UI.prefetchLinks();
     fillKinds();
     data = await M.load();
     fillOwnerInputs();

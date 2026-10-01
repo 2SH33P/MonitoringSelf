@@ -158,6 +158,24 @@
     });
   }
 
+  /* 鼠标悬停时预取另一个页面，点下去即刻切换 */
+  function prefetchLinks() {
+    document.querySelectorAll('a[href$=".html"]').forEach((a) =>
+      a.addEventListener(
+        'mouseenter',
+        () => {
+          if (a.dataset.prefetched) return;
+          a.dataset.prefetched = '1';
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = a.href;
+          document.head.appendChild(link);
+        },
+        { passive: true }
+      )
+    );
+  }
+
   function mountFooter(selector, data) {
     const node = document.querySelector(selector);
     if (node) node.textContent = `数据来源 data/status.json · 最后更新 ${M.fmtDateTime(data.updatedAt)}`;
@@ -166,6 +184,6 @@
   global.MonitoringUI = {
     esc, icon, initials, presenceOf, presenceHtml,
     heroHtml, timelineHtml, metricsHtml, applyIdentity, render,
-    toast, initTheme, mountFooter
+    toast, initTheme, prefetchLinks, mountFooter
   };
 })(window);
